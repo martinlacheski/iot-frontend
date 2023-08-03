@@ -1,5 +1,9 @@
+import { Typography } from "@mui/material";
+
 export const IotPage = () => {
   return (
-    <div>IotPage</div>
-  )
-}
+    <>
+      <Typography variant="h1">IotPage</Typography>
+    </>
+  );
+};
