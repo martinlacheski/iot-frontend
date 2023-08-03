@@ -1,8 +1,4 @@
-# React + Vite
+# iot-frontend
+Este repositorio contendrá el código fuente del frontend de una innovadora aplicación web de monitoreo de consumo de energía eléctrica y condiciones ambientales mediante el uso de Internet de las cosas (IoT). La plataforma proporcionará una solución integral para visualizar y analizar datos en tiempo real, permitiendo a los usuarios supervisar y optimizar su consumo de energía y mantener un ambiente sostenible.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Proyecto en desarrollo... 
