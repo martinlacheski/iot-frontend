@@ -6,8 +6,7 @@ import {
   SettingsOutlined,
   ArrowDropDownOutlined,
 } from "@mui/icons-material";
-import {FlexBetween} from "./";
-import { useDispatch } from "react-redux";
+import { FlexBetween } from "./";
 import {
   AppBar,
   Box,
@@ -22,30 +21,29 @@ import {
 } from "@mui/material";
 import { useAuthStore } from "../../hooks";
 
-export const Navbar = ({isSidebarOpen, setIsSidebarOpen} ) => {
+export const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
+  const theme = useTheme();
+  const { startLogout } = useAuthStore();
 
-    const theme = useTheme();
-    const { startLogout } = useAuthStore();
-  
-    const [anchorEl, setAnchorEl] = useState(null);
-    const isOpen = Boolean(anchorEl);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const isOpen = Boolean(anchorEl);
 
-    const { user } = useSelector((state) => state.auth);
-    const handleClick = (event) => {
-      setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-    //   setAnchorEl(null);
-        // startLogout();
-    };
+  const { user } = useSelector((state) => state.auth);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <AppBar
       sx={{
         position: "static",
-        background: theme.palette.secondary.main,
+        background: theme.palette.light.main,
         boxShadow: "none",
       }}
+      className="animate__animated animate__fadeIn animate__faster"
     >
       <Toolbar sx={{ justifyContent: "space-between" }}>
         {/* LEFT SIDE */}
@@ -54,12 +52,15 @@ export const Navbar = ({isSidebarOpen, setIsSidebarOpen} ) => {
             <MenuIcon />
           </IconButton>
           <FlexBetween
-            backgroundColor={theme.palette.secondary.main}
+            backgroundColor={theme.palette.light.alt}
             borderRadius="9px"
             gap="3px"
             padding="0.1rem 1.5rem"
           >
-            <InputBase placeholder="Search..." />
+            <InputBase
+              placeholder="Ingrese su búsqueda aquí..."
+              sx={{ width: "15rem" }}
+            />
             <IconButton>
               <Search />
             </IconButton>
@@ -68,9 +69,6 @@ export const Navbar = ({isSidebarOpen, setIsSidebarOpen} ) => {
 
         {/* RIGHT SIDE */}
         <FlexBetween>
-          <IconButton>
-            <SettingsOutlined sx={{ fontSize: "25px" }} />
-          </IconButton>
           <FlexBetween>
             <Button
               onClick={handleClick}
@@ -82,14 +80,13 @@ export const Navbar = ({isSidebarOpen, setIsSidebarOpen} ) => {
                 gap: "0.5rem",
               }}
             >
-
               <Box textAlign="left">
                 <Typography
                   fontWeight="bold"
                   fontSize="0.85rem"
                   sx={{ color: theme.palette.secondary }}
                 >
-                    {user?.name || "User"}
+                  {user?.name || "User"}
                 </Typography>
               </Box>
               <ArrowDropDownOutlined
@@ -108,11 +105,11 @@ export const Navbar = ({isSidebarOpen, setIsSidebarOpen} ) => {
                 horizontal: "center",
               }}
             >
-              <MenuItem onClick={startLogout}>Log Out</MenuItem>
+              <MenuItem onClick={startLogout}>Cerrar sesión</MenuItem>
             </Menu>
           </FlexBetween>
         </FlexBetween>
       </Toolbar>
     </AppBar>
-  )
-}
+  );
+};

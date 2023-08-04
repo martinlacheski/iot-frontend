@@ -1,21 +1,14 @@
-import React, { useEffect, useState } from "react";
-
+import React from "react";
 import {
   Box,
-  Divider,
   Drawer,
   IconButton,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  ListItemButton,
   Typography,
   useTheme,
 } from "@mui/material";
-import { ChevronLeft, SettingsOutlined } from "@mui/icons-material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { ChevronLeft } from "@mui/icons-material";
 import { FlexBetween } from "./";
+import { SidebarItems } from "./SidebarItems";
 
 export const Sidebar = ({
   drawerWidth,
@@ -23,17 +16,10 @@ export const Sidebar = ({
   setIsSidebarOpen,
   isNonMobile,
 }) => {
-  const { pathname } = useLocation();
-  const [active, setActive] = useState("");
-  const navigate = useNavigate();
   const theme = useTheme();
 
-  useEffect(() => {
-    setActive(pathname.substring(1));
-  }, [pathname]);
-
   return (
-    <Box component="nav">
+    <Box component="nav" className="animate__animated animate__fadeIn animate__faster">
       {isSidebarOpen && (
         <Drawer
           open={isSidebarOpen}
@@ -43,16 +29,16 @@ export const Sidebar = ({
           sx={{
             width: drawerWidth,
             "& .MuiDrawer-paper": {
-              color: theme.palette.primary.main,
-              backgroundColor: theme.palette.primary.main,
+              backgroundColor: theme.palette.background.main,
               boxSizing: "border-box",
               borderWidth: isNonMobile ? 0 : "2px",
               width: drawerWidth,
+              padding: "0.3rem",
             },
           }}
         >
           <Box width="100%">
-            <Box m="1.5rem 2rem 2rem 3rem">
+            <Box m="1rem">
               <FlexBetween color={theme.palette.secondary.main}>
                 <Box display="flex" alignItems="center" gap="0.5rem">
                   <Typography
@@ -60,7 +46,7 @@ export const Sidebar = ({
                     fontSize="1.5rem"
                     fontWeight="bold"
                   >
-                    ECOMVISION
+                    EnviroSense
                   </Typography>
                 </Box>
                 {!isNonMobile && (
@@ -70,7 +56,7 @@ export const Sidebar = ({
                 )}
               </FlexBetween>
             </Box>
-            <List>{/* ACÁ VAN LOS ITEMS */}</List>
+            <SidebarItems />  
           </Box>
         </Drawer>
       )}

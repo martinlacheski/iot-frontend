@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import AuthRoutes from "../auth/routes/AuthRoutes";
-import IotRoutes from "../iot/routes/IotRoutes";
+import AppRoutes from "../iot/routes/AppRoutes";
 import { useAuthStore } from "../hooks";
-import { Layout } from "../iot/layout";
 import { Loading } from "../ui/components";
 
 export const AppRouter = () => {
@@ -26,8 +25,7 @@ export const AppRouter = () => {
         </>
       ) : (
         <>
-          {/* <Route path="/*" element={<IotRoutes />} /> */}
-          <Route path="/*" element={<Layout />} />
+          <Route path="/*" element={<AppRoutes />} />
         </>
       )}
     </Routes>

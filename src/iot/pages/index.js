@@ -1,1 +1,1 @@
-export * from './IotPage';
+export * from './Main';
