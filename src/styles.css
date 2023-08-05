@@ -1,3 +1,7 @@
 .box-shadow {
   box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
 }
+
+.my-sweetalert-container {
+  z-index: 9999; /* Asegúrate de que este valor sea mayor que el z-index del modal */
+}

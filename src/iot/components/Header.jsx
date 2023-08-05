@@ -1,5 +1,6 @@
 import React from "react";
 import { Typography, Box, useTheme } from "@mui/material";
+import { FlexBetween } from "./FlexBetween";
 
 export const Header = ({ title, subtitle }) => {
   const theme = useTheme();
@@ -10,17 +11,25 @@ export const Header = ({ title, subtitle }) => {
         backgroundColor: "white",
       }}
     >
-      <Typography
-        variant="h1"
-        color={theme.palette.background.main}
-        fontWeight="bold"
-        sx={{ mb: "5px", fontSize: "2.1rem" }}
-      >
-        {title}
-      </Typography>
-      <Typography variant="p" color={theme.palette.primary.main} sx={{fontSize: "1rem"}}>
-        {subtitle}
-      </Typography>
+      <FlexBetween>
+        <Box>
+          <Typography
+            variant="h1"
+            color={theme.palette.background.main}
+            fontWeight="bold"
+            sx={{ mb: "5px", fontSize: "2.1rem" }}
+          >
+            {title}
+          </Typography>
+          <Typography
+            variant="p"
+            color={theme.palette.primary.main}
+            sx={{ fontSize: "1rem" }}
+          >
+            {subtitle}
+          </Typography>
+        </Box>
+      </FlexBetween>
     </Box>
   );
 };

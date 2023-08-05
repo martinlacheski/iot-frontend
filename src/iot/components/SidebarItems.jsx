@@ -56,6 +56,7 @@ export const SidebarItems = () => {
           );
         }
         const lcText = url.toLowerCase();
+        const isActive = pathname.startsWith(`/${lcText}`);
         return (
           <ListItem key={text} disablePadding>
             <Box
@@ -75,15 +76,15 @@ export const SidebarItems = () => {
                 }}
                 sx={{
                   backgroundColor:
-                    active === lcText
+                    isActive
                       ? theme.palette.primary.main
                       : "transparent",
-                  color: active === lcText ? "#020617" : "white",
+                  color: isActive ? "#020617" : "white",
                   fontSize: "12px",
                   transition: "background-color .5s, color .5s",
                   "&:hover": {
                     backgroundColor:
-                      active === lcText
+                      isActive
                         ? theme.palette.primary.main
                         : "rgba(226, 232, 240, 0.1)", // Cambiar el valor de opacidad para el color más claro
                   },
@@ -91,7 +92,7 @@ export const SidebarItems = () => {
               >
                 <ListItemIcon
                   sx={{
-                    color: active === lcText ? "#020617" : "white",
+                    color: isActive ? "#020617" : "white",
                     marginRight: "-1rem",
                     padding: "0rem",
                   }}
@@ -103,10 +104,10 @@ export const SidebarItems = () => {
                   primaryTypographyProps={{
                     fontSize: 13,
                     margin: 0,
-                    fontWeight: active === lcText ? "700" : "400",
+                    fontWeight: isActive ? "700" : "400",
                   }}
                 />
-                {active === lcText && (
+                {isActive && (
                   <ChevronRightOutlined sx={{ ml: "auto" }} />
                 )}
               </ListItemButton>
