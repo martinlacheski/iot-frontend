@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   Box,
@@ -35,7 +35,7 @@ export const SidebarItems = () => {
       {navItems.map(({ text, url, icon }) => {
         if (!icon) {
           return (
-            <>
+            <Fragment key={text}>
               <Typography
                 key={text}
                 color="white"
@@ -52,7 +52,7 @@ export const SidebarItems = () => {
                   margin: "0 1rem 0.5rem 1rem",
                 }}
               />
-            </>
+            </Fragment>
           );
         }
         const lcText = url.toLowerCase();

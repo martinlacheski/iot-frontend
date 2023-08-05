@@ -40,7 +40,7 @@ export const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
     <AppBar
       sx={{
         position: "static",
-        background: theme.palette.light.main,
+        background: "white",
         boxShadow: "none",
       }}
       className="animate__animated animate__fadeIn animate__faster"
@@ -52,14 +52,15 @@ export const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             <MenuIcon />
           </IconButton>
           <FlexBetween
-            backgroundColor={theme.palette.light.alt}
+            // backgroundColor={theme.palette.light.alt}
+            border={`1px solid ${theme.palette.light.main}`}
             borderRadius="9px"
             gap="3px"
-            padding="0.1rem 1.5rem"
+            padding="0rem 1.5rem"
           >
             <InputBase
               placeholder="Ingrese su búsqueda aquí..."
-              sx={{ width: "15rem" }}
+              sx={{ width: "20rem" }}
             />
             <IconButton>
               <Search />
