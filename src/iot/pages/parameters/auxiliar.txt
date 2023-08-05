@@ -12,9 +12,6 @@ import {
   Typography,
   Alert,
 } from "@mui/material";
-import 
-  {ModeEditOutlineOutlined, DeleteOutlineOutlined}
- from "@mui/icons-material";
 import { useForm } from "../../../hooks/useForm";
 import { FlexBetween } from "../../components/FlexBetween";
 import {
@@ -47,10 +44,6 @@ export const Countries = () => {
     onResetForm,
   } = useForm(formData, formValidations);
 
-  useEffect(() => {
-    fetchCountries();
-  }, []);
-
   // OBTENER PAÍSES
   const fetchCountries = async () => {
     try {
@@ -60,6 +53,10 @@ export const Countries = () => {
       console.log("Error fetching countries:", error);
     }
   };
+
+  useEffect(() => {
+    fetchCountries();
+  }, []);
 
   // CREAR PAÍS
   const handleCreateCountry = async () => {
@@ -164,17 +161,15 @@ export const Countries = () => {
             variant="outlined"
             color="primary"
             onClick={() => handleEditCountry(params.row._id)}
-            size="small"
           >
-            <ModeEditOutlineOutlined fontSize="small" />
+            Editar
           </Button>
           <Button
             variant="outlined"
-            color="error"
+            color="secondary"
             onClick={() => handleDelete(params.row._id)}
-            size="small"
           >
-            <DeleteOutlineOutlined fontSize="small" />
+            Eliminar
           </Button>
         </Box>
       ),
