@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Box, useMediaQuery } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
-import {Navbar, Sidebar} from "../components";
+import { Navbar, Sidebar } from "../components";
 
 export const Layout = () => {
   const isNonMobile = useMediaQuery("(min-width: 600px)");
@@ -17,7 +17,14 @@ export const Layout = () => {
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
       />
-      <Box flexGrow={1} height="100vh" overflow="auto">
+      <Box
+        flexGrow={1}
+        height="100vh"
+        overflow="auto"
+        sx={{
+          backgroundColor: "#f3f4f6",
+        }}
+      >
         <Navbar
           isSidebarOpen={isSidebarOpen}
           setIsSidebarOpen={setIsSidebarOpen}
@@ -26,4 +33,4 @@ export const Layout = () => {
       </Box>
     </Box>
   );
-}
+};
