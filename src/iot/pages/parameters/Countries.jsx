@@ -12,9 +12,10 @@ import {
   Typography,
   Alert,
 } from "@mui/material";
-import 
-  {ModeEditOutlineOutlined, DeleteOutlineOutlined}
- from "@mui/icons-material";
+import {
+  ModeEditOutlineOutlined,
+  DeleteOutlineOutlined,
+} from "@mui/icons-material";
 import { useForm } from "../../../hooks/useForm";
 import { FlexBetween } from "../../components/FlexBetween";
 import {
@@ -122,7 +123,7 @@ export const Countries = () => {
         showSuccessToast(data.msg);
       }
     } catch (error) {
-      showErrorAlert(error.response.data?.msg);;
+      showErrorAlert(error.response.data?.msg);
     }
   };
 
@@ -164,17 +165,15 @@ export const Countries = () => {
             variant="outlined"
             color="primary"
             onClick={() => handleEditCountry(params.row._id)}
-            size="small"
           >
-            <ModeEditOutlineOutlined fontSize="small" />
+            Editar
           </Button>
           <Button
             variant="outlined"
-            color="error"
+            color="secondary"
             onClick={() => handleDelete(params.row._id)}
-            size="small"
           >
-            <DeleteOutlineOutlined fontSize="small" />
+            Eliminar
           </Button>
         </Box>
       ),
@@ -274,15 +273,25 @@ export const Countries = () => {
               </Alert>
             </Grid>
           </Grid>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={onSubmit}
-            style={{ marginTop: "1rem", float: "right" }}
-            disabled={!isFormValid}
-          >
-            {editCountryId ? "Guardar" : "Crear"}
-          </Button>
+         <Box sx={{float: "right"}}>
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={handleCloseModal}
+              style={{ marginTop: "1rem", marginRight: ".5rem"}}
+            >
+              Cancelar
+            </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={onSubmit}
+              style={{ marginTop: "1rem"}}
+              disabled={!isFormValid}
+            >
+              {editCountryId ? "Guardar" : "Crear"}
+            </Button>
+          </Box>
         </Box>
       </Modal>
     </Fragment>
