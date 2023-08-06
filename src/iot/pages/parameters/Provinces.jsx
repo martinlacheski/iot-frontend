@@ -41,7 +41,6 @@ export const Provinces = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [editProvinceId, setEditProvinceId] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
-  const [editMode, setEditMode] = useState(false);
 
   const {
     formState,
