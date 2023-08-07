@@ -296,9 +296,9 @@ export const Cities = () => {
                   <MenuItem value="">
                     <em>Seleccionar provincia</em>
                   </MenuItem>
-                  {provinces.map((city) => (
-                    <MenuItem key={city._id} value={city._id}>
-                      {city.name}
+                  {provinces.map((province) => (
+                    <MenuItem key={province._id} value={province._id}>
+                      {province.name}
                     </MenuItem>
                   ))}
                 </Select>
