@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { Main } from "../pages";
+import { CreateEnvironment, Main } from "../pages";
 import { Layout } from "../layout";
 import {
   Parameters,
@@ -38,6 +38,7 @@ const AppRoutes = () => {
         <Route path="/parameters/branches" element={<Branches />} />
         <Route path="/parameters/environment-types" element={<EnvironmentTypes />} />
         <Route path="/parameters/environments" element={<Environments />} />
+        <Route path="/parameters/environments/create" element={<CreateEnvironment />} />
         <Route path="/parameters/equipment-types" element={<EquipmentTypes />} />
         <Route path="/parameters/equipments" element={<Equipments />} />
         <Route path="/parameters/sensor-types" element={<SensorTypes />} />

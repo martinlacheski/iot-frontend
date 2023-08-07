@@ -14,3 +14,5 @@ export * from "./Sensors";
 export * from "./BoardTypes";
 export * from "./Boards";
 export * from "./Users";
+
+export * from "./CreateEnvironment";
