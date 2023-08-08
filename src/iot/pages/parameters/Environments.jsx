@@ -118,16 +118,18 @@ export const Environments = () => {
       field: "capacity",
       headerName: "Capacidad",
       width: 120,
-      renderCell: (params) => <Box>{params.row.capacity} personas</Box>,
+      renderCell: (params) => (
+        <Box>
+          {params.row.capacity ? params.row.capacity + " personas" : ""}{" "}
+        </Box>
+      ),
     },
     {
       field: "surface",
       headerName: "Superficie",
       width: 100,
       renderCell: (params) => (
-        <Box>
-          {params.row.surface} m<sup>2</sup>
-        </Box>
+        <Box>{params.row.surface ? params.row.surface + " m²" : ""}</Box>
       ),
     },
     {
@@ -136,7 +138,9 @@ export const Environments = () => {
       width: 150,
       renderCell: (params) => (
         <Box>
-          {params.row.equipments.length}{" ítems"}
+          {params.row.equipments.length > 0
+            ? params.row.equipments.length + " items"
+            : ""}
         </Box>
       ),
     },
@@ -324,6 +328,12 @@ export const Environments = () => {
                   </ListItem>
                 ))}
               </List>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography sx={{ fontWeight: "bold" }}>
+                Observaciones:{" "}
+              </Typography>
+              <Typography>{formValues.observations}</Typography>
             </Grid>
           </Grid>
 
