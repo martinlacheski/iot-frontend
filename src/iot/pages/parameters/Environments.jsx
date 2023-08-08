@@ -139,7 +139,7 @@ export const Environments = () => {
       renderCell: (params) => (
         <Box>
           {params.row.equipments.length > 0
-            ? params.row.equipments.length + " items"
+            ? params.row.equipments.length + " ítems"
             : ""}
         </Box>
       ),
@@ -156,7 +156,7 @@ export const Environments = () => {
             gap: "1rem",
           }}
         >
-          <Button variant="outlined" color="primary" onClick={() => {}}>
+          <Button variant="outlined" color="primary" onClick={() => navigate(`/parameters/environments/update/${params.row._id}`)}>
             Editar
           </Button>
           <Button

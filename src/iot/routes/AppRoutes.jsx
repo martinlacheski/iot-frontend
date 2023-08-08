@@ -1,22 +1,24 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { CreateEnvironment, Main } from "../pages";
 import { Layout } from "../layout";
 import {
-  Parameters,
-  Countries,
-  Provinces,
-  Cities,
-  Organization,
+  BoardTypes,
+  Boards,
   Branches,
+  Cities,
+  Countries,
+  CreateEnvironment,
   EnvironmentTypes,
   Environments,
   EquipmentTypes,
   Equipments,
+  Main,
+  Organization,
+  Parameters,
+  Provinces,
   SensorTypes,
   Sensors,
-  BoardTypes,
-  Boards,
-  Users
+  UpdateEnvironment,
+  Users,
 } from "../pages";
 
 const AppRoutes = () => {
@@ -36,17 +38,29 @@ const AppRoutes = () => {
         <Route path="/parameters/cities" element={<Cities />} />
         <Route path="/parameters/organization" element={<Organization />} />
         <Route path="/parameters/branches" element={<Branches />} />
-        <Route path="/parameters/environment-types" element={<EnvironmentTypes />} />
+        <Route
+          path="/parameters/environment-types"
+          element={<EnvironmentTypes />}
+        />
         <Route path="/parameters/environments" element={<Environments />} />
-        <Route path="/parameters/environments/create" element={<CreateEnvironment />} />
-        <Route path="/parameters/equipment-types" element={<EquipmentTypes />} />
+        <Route
+          path="/parameters/environments/create"
+          element={<CreateEnvironment />}
+        />
+        <Route
+          path="/parameters/environments/update/:id"
+          element={<UpdateEnvironment />}
+        />
+        <Route
+          path="/parameters/equipment-types"
+          element={<EquipmentTypes />}
+        />
         <Route path="/parameters/equipments" element={<Equipments />} />
         <Route path="/parameters/sensor-types" element={<SensorTypes />} />
         <Route path="/parameters/sensors" element={<Sensors />} />
         <Route path="/parameters/board-types" element={<BoardTypes />} />
         <Route path="/parameters/boards" element={<Boards />} />
         <Route path="/parameters/users" element={<Users />} />
-
       </Route>
 
       <Route path="/*" element={<Navigate to="/" />} />

@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Header } from "../../components/Header";
-import iotApi from "../../../api/iotApi";
+import { useNavigate, useParams } from "react-router-dom";
+import { iotApi } from "../../../api";
 import {
   Box,
   Button,
@@ -18,7 +19,6 @@ import {
 import { RemoveCircleOutlineOutlined } from "@mui/icons-material";
 import { useForm } from "../../../hooks/useForm";
 import { showSuccessToast, showErrorAlert } from "../../../utils";
-import { useNavigate } from "react-router-dom";
 
 const formData = {
   name: "",
@@ -40,23 +40,19 @@ const formValidations = {
   ],
   branchId: [(value) => value.trim() !== "", "La sede es obligatoria."],
   floor: [
-    (value) =>
-      value.trim() === "" || (/^\d+$/.test(value) && parseInt(value) > 0),
+    (value) => /^\d+$/.test(value) && parseInt(value) > 0,
     "El piso debe ser positivo.",
   ],
   room: [
-    (value) =>
-      value.trim() === "" || (/^\d+$/.test(value) && parseInt(value) > 0),
+    (value) => /^\d+$/.test(value) && parseInt(value) > 0,
     "El salón debe ser positivo.",
   ],
   capacity: [
-    (value) =>
-      value.trim() === "" || (/^\d+$/.test(value) && parseInt(value) > 0),
+    (value) => /^\d+$/.test(value) && parseInt(value) > 0,
     "La capacidad debe ser positiva.",
   ],
   surface: [
-    (value) =>
-      value.trim() === "" || (/^\d+$/.test(value) && parseInt(value) > 0),
+    (value) => /^\d+$/.test(value) && parseInt(value) > 0,
     "La superficie debe ser positiva.",
   ],
   equipments: [
@@ -68,13 +64,14 @@ const formValidations = {
     "Verifique que todos los campos de equipamiento tengan un tipo y una cantidad válida.",
   ],
 };
-
-export const CreateEnvironment = () => {
-  const theme = useTheme();
+export const UpdateEnvironment = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
+    const theme = useTheme();
   const [typesOfEnvironment, setTypesOfEnvironment] = useState([]);
   const [branches, setBranches] = useState([]);
   const [equipmentsList, setEquipmentsList] = useState([]);
+
   const [selectedEquipments, setSelectedEquipments] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [disabledButton, setDisabledButton] = useState(false);
@@ -130,12 +127,46 @@ export const CreateEnvironment = () => {
   };
 
   useEffect(() => {
-    Promise.all([
-      fetchTypesOfEnvironment(),
-      fetchBranches(),
-      fetchEquipments(),
-    ]);
+    const getEnvironment = async () => {
+      try {
+        const { data } = await iotApi.get(`/environments/${id}`);
+
+        formData.name = data.environment.name;
+        formData.typeOfEnvironmentId = data.environment.typeOfEnvironment;
+        formData.branchId = data.environment.branch;
+        formData.floor = data.environment.floor;
+        formData.room = data.environment.room;
+        formData.capacity = data.environment.capacity;
+        formData.surface = data.environment.surface;
+        formData.observations = data.environment.observations;
+        formData.equipments = data.environment.equipments.map(
+          ({ _id, ...restoAtributos }) => ({
+            ...restoAtributos,
+          })
+        );
+
+        Promise.all([
+          fetchTypesOfEnvironment(),
+          fetchBranches(),
+          fetchEquipments(),
+        ]);
+
+        startSelectedEquipments();
+      } catch (error) {
+        return navigate("/parameters/environments");
+      }
+    };
+    getEnvironment();
   }, []);
+
+  const startSelectedEquipments = () => {
+    setSelectedEquipments(
+      formData.equipments.map((equipment) => ({
+        equipment: equipment.equipment,
+        quantity: equipment.quantity,
+      }))
+    );
+  };
 
   const handleEquipmentChange = (index, equipmentId) => {
     const updatedSelectedEquipments = [...selectedEquipments];
@@ -183,6 +214,7 @@ export const CreateEnvironment = () => {
   const handleSubmit = async () => {
     setFormSubmitted(true);
     if (!isFormValid) return;
+    setDisabledButton(true);
     const body = {
       name,
       typeOfEnvironmentId,
@@ -191,29 +223,26 @@ export const CreateEnvironment = () => {
       room,
       capacity,
       surface,
-      equipments,
       observations,
+      equipments,
     };
-
     setDisabledButton(true);
-
     try {
-      const { data } = await iotApi.post("/environments", body);
+      const { data } = await iotApi.put(`/environments/${id}`, body);
       showSuccessToast(data.msg);
       setTimeout(() => {
         navigate("/parameters/environments");
       }, 2000);
     } catch (error) {
-      showErrorAlert(error.response.data?.msg);
+        showErrorAlert(error.response.data?.msg);
       setDisabledButton(false);
     }
   };
-
   return (
     <Fragment>
       <Header
-        title="Crear ambiente"
-        subtitle="En esta sección podrá registrar un nuevo ambiente en el sistema."
+        title="Actualizar ambiente"
+        subtitle="En esta sección podrá actualizar un ambiente del sistema."
       />
 
       {/* CUERPO DE LA PÁGINA */}
@@ -463,7 +492,7 @@ export const CreateEnvironment = () => {
             onClick={handleSubmit}
             disabled={!isFormValid || disabledButton}
           >
-            Crear ambiente
+            Actualizar ambiente
           </Button>
         </Box>
       </Box>

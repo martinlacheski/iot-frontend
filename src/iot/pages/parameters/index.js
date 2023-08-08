@@ -16,3 +16,4 @@ export * from "./Boards";
 export * from "./Users";
 
 export * from "./CreateEnvironment";
+export * from "./UpdateEnvironment";
