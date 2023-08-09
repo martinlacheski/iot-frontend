@@ -16,6 +16,10 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
+import {
+  ModeEditOutlineOutlined,
+  DeleteOutlineOutlined,
+} from "@mui/icons-material";
 import { useForm } from "../../../hooks/useForm";
 import { FlexBetween } from "../../components/FlexBetween";
 import {
@@ -53,7 +57,6 @@ export const Equipments = () => {
     descriptionValid,
     typeOfEquipmentIdValid,
     isFormValid,
-    onResetForm,
   } = useForm(formData, formValidations);
 
   // OBTENER EQUIPAMIENTOS
@@ -99,7 +102,9 @@ export const Equipments = () => {
 
   // EDITAR EQUIPAMIENTO
   const handleEditEquipment = async (id) => {
-    const equipmentToEdit = equipments.find((equipment) => equipment._id === id);
+    const equipmentToEdit = equipments.find(
+      (equipment) => equipment._id === id
+    );
     if (equipmentToEdit) {
       formState.description = equipmentToEdit.description;
       formState.typeOfEquipmentId = equipmentToEdit.typeOfEquipment._id;
@@ -167,38 +172,43 @@ export const Equipments = () => {
   };
 
   const columns = [
-    { field: "_id", headerName: "ID", flex: 0.5 },
+    { field: "_id", headerName: "ID", width: 200, hide: true },
+    { field: "description", headerName: "Descripción", minWidth: 200, flex: 1 },
     {
       field: "typeOfEquipment.name", // Esto debe cambiarse a:
       headerName: "Tipo de equipamiento",
-      flex: 0.5,
+      minWidth: 200,
+      flex: 1,
       valueGetter: (params) => params.row.typeOfEquipment.name, // Utiliza valueGetter para acceder a propiedades anidadas
     },
-    { field: "description", headerName: "Descripción", flex: 0.5 },
     {
       field: "actions",
       headerName: "Acciones",
-      flex: 0.5,
+      width: 160,
       renderCell: (params) => (
         <Box
           sx={{
             display: "flex",
-            gap: "1rem",
+            gap: ".5rem",
           }}
         >
           <Button
+            title="Editar equipamiento"
+            size="small"
             variant="outlined"
             color="primary"
             onClick={() => handleEditEquipment(params.row._id)}
           >
-            Editar
+            <ModeEditOutlineOutlined />
           </Button>
           <Button
+            title="Eliminar equipamiento"
+            size="small"
             variant="outlined"
             color="secondary"
             onClick={() => handleDelete(params.row._id)}
           >
-            Eliminar
+            <DeleteOutlineOutlined />
           </Button>
         </Box>
       ),
@@ -321,7 +331,9 @@ export const Equipments = () => {
                 onChange={onInputChange}
                 fullWidth
                 error={!!descriptionValid && formSubmitted}
-                helperText={!!descriptionValid && formSubmitted ? descriptionValid : ""}
+                helperText={
+                  !!descriptionValid && formSubmitted ? descriptionValid : ""
+                }
               />
             </Grid>
             <Grid item xs={12} display={!!errorMessage ? "" : "none"}>

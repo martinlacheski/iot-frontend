@@ -148,12 +148,12 @@ export const EquipmentTypes = () => {
   };
 
   const columns = [
-    { field: "_id", headerName: "ID", flex: 0.5 },
-    { field: "name", headerName: "Nombre", flex: 0.5 },
+    { field: "_id", headerName: "ID", width: 200, hide: true },
+    { field: "name", headerName: "Nombre", minWidth: 200, flex: 1 },
     {
       field: "actions",
       headerName: "Acciones",
-      flex: 0.5,
+      width: 160,
       renderCell: (params) => (
         <Box
           sx={{
@@ -162,18 +162,22 @@ export const EquipmentTypes = () => {
           }}
         >
           <Button
+            title="Editar tipo de equipamiento"
+            size="small"
             variant="outlined"
             color="primary"
             onClick={() => handleEditEquipmentType(params.row._id)}
           >
-            Editar
+            <ModeEditOutlineOutlined />
           </Button>
           <Button
+            title="Eliminar tipo de equipamiento"
+            size="small"
             variant="outlined"
             color="secondary"
             onClick={() => handleDelete(params.row._id)}
           >
-            Eliminar
+            <DeleteOutlineOutlined />
           </Button>
         </Box>
       ),
@@ -251,7 +255,9 @@ export const EquipmentTypes = () => {
               fontWeight: "bold",
             }}
           >
-            {editEquipmentId ? "Editar tipo de equipamiento" : "Crear nuevo tipo de equipamiento"}
+            {editEquipmentId
+              ? "Editar tipo de equipamiento"
+              : "Crear nuevo tipo de equipamiento"}
           </Typography>
           <Divider sx={{ mb: "1rem" }} />
 
@@ -273,12 +279,12 @@ export const EquipmentTypes = () => {
               </Alert>
             </Grid>
           </Grid>
-         <Box sx={{float: "right"}}>
+          <Box sx={{ float: "right" }}>
             <Button
               variant="outlined"
               color="secondary"
               onClick={handleCloseModal}
-              style={{ marginTop: "1rem", marginRight: ".5rem"}}
+              style={{ marginTop: "1rem", marginRight: ".5rem" }}
             >
               Cancelar
             </Button>
@@ -286,7 +292,7 @@ export const EquipmentTypes = () => {
               variant="outlined"
               color="primary"
               onClick={onSubmit}
-              style={{ marginTop: "1rem"}}
+              style={{ marginTop: "1rem" }}
               disabled={!isFormValid}
             >
               {editEquipmentId ? "Guardar" : "Crear"}

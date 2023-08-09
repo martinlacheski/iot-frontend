@@ -10,7 +10,6 @@ import {
   TextField,
   Grid,
   Typography,
-  Alert,
 } from "@mui/material";
 import {
   ModeEditOutlineOutlined,
@@ -148,12 +147,12 @@ export const EnvironmentTypes = () => {
   };
 
   const columns = [
-    { field: "_id", headerName: "ID", flex: 0.5 },
-    { field: "name", headerName: "Nombre", flex: 0.5 },
+    { field: "_id", headerName: "ID", width: 200, hide: true },
+    { field: "name", headerName: "Nombre", minWidth: 200, flex: 1 },
     {
       field: "actions",
       headerName: "Acciones",
-      flex: 0.5,
+      width: 160,
       renderCell: (params) => (
         <Box
           sx={{
@@ -162,18 +161,22 @@ export const EnvironmentTypes = () => {
           }}
         >
           <Button
+            title="Editar tipo de ambiente"
+            size="small"
             variant="outlined"
             color="primary"
             onClick={() => handleEditEnvironmentType(params.row._id)}
           >
-            Editar
+            <ModeEditOutlineOutlined />
           </Button>
           <Button
+            title="Eliminar tipo de ambiente"
+            size="small"
             variant="outlined"
             color="secondary"
             onClick={() => handleDelete(params.row._id)}
           >
-            Eliminar
+            <DeleteOutlineOutlined />
           </Button>
         </Box>
       ),

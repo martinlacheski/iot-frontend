@@ -40,23 +40,19 @@ const formValidations = {
   ],
   branchId: [(value) => value.trim() !== "", "La sede es obligatoria."],
   floor: [
-    (value) =>
-      value.trim() === "" || (/^\d+$/.test(value) && parseInt(value) > 0),
+    (value) => /^\d+$/.test(value) && parseInt(value) > 0,
     "El piso debe ser positivo.",
   ],
   room: [
-    (value) =>
-      value.trim() === "" || (/^\d+$/.test(value) && parseInt(value) > 0),
+    (value) => /^\d+$/.test(value) && parseInt(value) > 0,
     "El salón debe ser positivo.",
   ],
   capacity: [
-    (value) =>
-      value.trim() === "" || (/^\d+$/.test(value) && parseInt(value) > 0),
+    (value) => /^\d+$/.test(value) && parseInt(value) > 0,
     "La capacidad debe ser positiva.",
   ],
   surface: [
-    (value) =>
-      value.trim() === "" || (/^\d+$/.test(value) && parseInt(value) > 0),
+    (value) => /^\d+$/.test(value) && parseInt(value) > 0,
     "La superficie debe ser positiva.",
   ],
   equipments: [

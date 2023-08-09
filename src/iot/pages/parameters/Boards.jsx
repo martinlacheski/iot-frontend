@@ -16,6 +16,10 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
+import {
+  ModeEditOutlineOutlined,
+  DeleteOutlineOutlined,
+} from "@mui/icons-material";
 import { useForm } from "../../../hooks/useForm";
 import { FlexBetween } from "../../components/FlexBetween";
 import {
@@ -166,24 +170,26 @@ export const Boards = () => {
   };
 
   const columns = [
-    { field: "_id", headerName: "ID", width: 200 },
-    { field: "name", headerName: "Nombre", width: 250 },
+    { field: "_id", headerName: "ID", width: 200, hide: true },
+    { field: "name", headerName: "Nombre", minWidth: 250, flex: 0.5 },
     {
       field: "typeOfBoard.name",
       headerName: "Tipo de placa",
-      width: 250,
+      minWidth: 250,
+      flex: 0.5,
       valueGetter: (params) => params.row.typeOfBoard.name,
     },
     {
       field: "environment.name",
       headerName: "Ambiente",
-      width: 250,
+      minWidth: 250,
+      flex: 0.5,
       valueGetter: (params) => params.row.environment.name,
     },
     {
       field: "actions",
       headerName: "Acciones",
-      width: 300,
+      minWidth: 160,
       renderCell: (params) => (
         <Box
           sx={{
@@ -192,18 +198,22 @@ export const Boards = () => {
           }}
         >
           <Button
+            title="Editar placa"
+            size="small"
             variant="contained"
             color="primary"
             onClick={() => handleEditBoard(params.row._id)}
           >
-            Editar
+            <ModeEditOutlineOutlined />
           </Button>
           <Button
+            title="Eliminar placa"
+            size="small"
             variant="outlined"
             color="secondary"
             onClick={() => handleDeleteBoard(params.row._id)}
           >
-            Eliminar
+            <DeleteOutlineOutlined />
           </Button>
         </Box>
       ),

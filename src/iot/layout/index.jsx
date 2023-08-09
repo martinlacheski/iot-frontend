@@ -16,7 +16,7 @@ export const Layout = () => {
         drawerWidth="250px"
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
-      />
+        />
       <Box
         flexGrow={1}
         height="100vh"

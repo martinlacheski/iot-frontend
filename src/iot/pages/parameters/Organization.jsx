@@ -11,14 +11,9 @@ import {
   MenuItem,
   Button,
   Typography,
-  Alert,
 } from "@mui/material";
 import { useForm } from "../../../hooks/useForm";
-import {
-  showSuccessToast,
-  showErrorAlert,
-  showConfirmationAlert,
-} from "../../../utils";
+import { showSuccessToast, showErrorAlert } from "../../../utils";
 
 const formData = {
   id: "",
@@ -44,7 +39,6 @@ const formValidations = {
 export const Organization = () => {
   const [cities, setCities] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
 
   const {
     formState,
@@ -96,16 +90,14 @@ export const Organization = () => {
     setFormSubmitted(true);
     if (!isFormValid) return;
     try {
-      const { data } = await iotApi.put(`/organization/${formState.id}`, formState);
+      const { data } = await iotApi.put(
+        `/organization/${formState.id}`,
+        formState
+      );
       showSuccessToast(data.msg);
+      getOrganization();
     } catch (error) {
-      if (error.response) {
-        setErrorMessage(error.response.data.msg);
-        showErrorAlert(error.response.data.msg);
-      } else {
-        setErrorMessage(error.message);
-        showErrorAlert(error.message);
-      }
+      showErrorAlert(error.response?.data?.msg);
     }
   };
 
@@ -212,7 +204,7 @@ export const Organization = () => {
               onChange={onInputChange}
               fullWidth
               autoComplete="off"
-              error={!!webpageValid && formSubmitted} 
+              error={!!webpageValid && formSubmitted}
               helperText={!!webpageValid && formSubmitted ? webpageValid : ""}
             />
           </Grid>
@@ -235,7 +227,6 @@ export const Organization = () => {
             variant="contained"
             color="primary"
             disabled={!isFormValid}
-            // disabled={false}
             onClick={onSubmit}
           >
             Guardar cambios

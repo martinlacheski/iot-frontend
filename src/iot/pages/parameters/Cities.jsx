@@ -16,6 +16,10 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
+import {
+  ModeEditOutlineOutlined,
+  DeleteOutlineOutlined,
+} from "@mui/icons-material";
 import { useForm } from "../../../hooks/useForm";
 import { FlexBetween } from "../../components/FlexBetween";
 import {
@@ -32,7 +36,10 @@ const formData = {
 
 const formValidations = {
   name: [(value) => value.trim() !== "", "El nombre es obligatorio."],
-  postalCode: [(value) => value.trim() !== "", "El código postal es obligatorio."],
+  postalCode: [
+    (value) => value.trim() !== "",
+    "El código postal es obligatorio.",
+  ],
   provinceId: [(value) => value !== "", "Debe seleccionar una provincia."],
 };
 
@@ -114,14 +121,9 @@ export const Cities = () => {
     setFormSubmitted(true);
     if (!isFormValid) return;
     try {
-      const { data } = await iotApi.put(
-        `/cities/${editCityId}`,
-        formState
-      );
+      const { data } = await iotApi.put(`/cities/${editCityId}`, formState);
       setCities(
-        cities.map((city) =>
-          city._id === editCityId ? data.city : city
-        )
+        cities.map((city) => (city._id === editCityId ? data.city : city))
       );
       fetchCities();
       handleCloseModal();
@@ -170,19 +172,19 @@ export const Cities = () => {
   };
 
   const columns = [
-    { field: "_id", headerName: "ID", flex: 0.5 },
-    { field: "name", headerName: "Ciudad", flex: 0.5 },
-    { field: "postalCode", headerName: "Código postal", flex: 0.5 },
+    { field: "_id", headerName: "ID", width: 200, hide: true },
+    { field: "name", headerName: "Ciudad", minWidth: 200, flex: 1 },
+    { field: "postalCode", headerName: "Código postal", minWidth: 160 },
     {
       field: "province.name", // Esto debe cambiarse a:
       headerName: "Provincia",
-      flex: 0.5,
+      minWidth: 200,
       valueGetter: (params) => params.row.province.name, // Utiliza valueGetter para acceder a propiedades anidadas
     },
     {
       field: "actions",
       headerName: "Acciones",
-      flex: 0.5,
+      width: 160,
       renderCell: (params) => (
         <Box
           sx={{
@@ -191,18 +193,22 @@ export const Cities = () => {
           }}
         >
           <Button
+            size="small"
+            title="Editar ciudad"
             variant="outlined"
             color="primary"
             onClick={() => handleEditCity(params.row._id)}
           >
-            Editar
+            <ModeEditOutlineOutlined />
           </Button>
           <Button
+            size="small"
+            title="Eliminar ciudad"
             variant="outlined"
             color="secondary"
             onClick={() => handleDelete(params.row._id)}
           >
-            Eliminar
+            <DeleteOutlineOutlined />
           </Button>
         </Box>
       ),
@@ -303,7 +309,7 @@ export const Cities = () => {
                   ))}
                 </Select>
                 {!!provinceIdValid && formSubmitted && (
-                  <Alert severity="error" sx={{mt: ".5rem"}}>
+                  <Alert severity="error" sx={{ mt: ".5rem" }}>
                     <Typography variant="body2">{provinceIdValid}</Typography>
                   </Alert>
                 )}
@@ -328,7 +334,9 @@ export const Cities = () => {
                 onChange={onInputChange}
                 fullWidth
                 error={!!postalCodeValid && formSubmitted}
-                helperText={!!postalCodeValid && formSubmitted ? postalCodeValid : ""}
+                helperText={
+                  !!postalCodeValid && formSubmitted ? postalCodeValid : ""
+                }
               />
             </Grid>
             <Grid item xs={12} display={!!errorMessage ? "" : "none"}>
@@ -338,12 +346,12 @@ export const Cities = () => {
             </Grid>
           </Grid>
 
-          <Box sx={{float: "right"}}>
+          <Box sx={{ float: "right" }}>
             <Button
               variant="outlined"
               color="secondary"
               onClick={handleCloseModal}
-              style={{ marginTop: "1rem", marginRight: ".5rem"}}
+              style={{ marginTop: "1rem", marginRight: ".5rem" }}
             >
               Cancelar
             </Button>
@@ -351,7 +359,7 @@ export const Cities = () => {
               variant="outlined"
               color="primary"
               onClick={onSubmit}
-              style={{ marginTop: "1rem"}}
+              style={{ marginTop: "1rem" }}
               disabled={!isFormValid}
             >
               {editCityId ? "Guardar" : "Crear"}
