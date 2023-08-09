@@ -148,32 +148,36 @@ export const Countries = () => {
   };
 
   const columns = [
-    { field: "_id", headerName: "ID", flex: 0.5 },
-    { field: "name", headerName: "Nombre", flex: 0.5 },
+    { field: "_id", headerName: "ID", width: 200, hide: true },
+    { field: "name", headerName: "Nombre", minWidth: 200, flex: 1 },
     {
       field: "actions",
       headerName: "Acciones",
-      flex: 0.5,
+      width: 160,
       renderCell: (params) => (
         <Box
           sx={{
             display: "flex",
-            gap: "1rem",
+            gap: ".5rem",
           }}
         >
           <Button
+            title="Editar país"
             variant="outlined"
+            size="small"
             color="primary"
             onClick={() => handleEditCountry(params.row._id)}
           >
-            Editar
+            <ModeEditOutlineOutlined />
           </Button>
           <Button
+            title="Eliminar país"
             variant="outlined"
             color="secondary"
+            size="small"
             onClick={() => handleDelete(params.row._id)}
           >
-            Eliminar
+            <DeleteOutlineOutlined />
           </Button>
         </Box>
       ),
@@ -213,6 +217,7 @@ export const Countries = () => {
             Listado de países
           </Typography>
           <Button
+            title="Crear país"
             variant="contained"
             color="primary"
             onClick={handleOpenModal}
@@ -262,6 +267,7 @@ export const Countries = () => {
                 name="name"
                 value={name}
                 onChange={onInputChange}
+                autoComplete="off"
                 fullWidth
                 error={!!nameValid && formSubmitted}
                 helperText={!!nameValid && formSubmitted ? nameValid : ""}
@@ -273,12 +279,12 @@ export const Countries = () => {
               </Alert>
             </Grid>
           </Grid>
-         <Box sx={{float: "right"}}>
+          <Box sx={{ float: "right" }}>
             <Button
               variant="outlined"
               color="secondary"
               onClick={handleCloseModal}
-              style={{ marginTop: "1rem", marginRight: ".5rem"}}
+              style={{ marginTop: "1rem", marginRight: ".5rem" }}
             >
               Cancelar
             </Button>
@@ -286,7 +292,7 @@ export const Countries = () => {
               variant="outlined"
               color="primary"
               onClick={onSubmit}
-              style={{ marginTop: "1rem"}}
+              style={{ marginTop: "1rem" }}
               disabled={!isFormValid}
             >
               {editCountryId ? "Guardar" : "Crear"}

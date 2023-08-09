@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Drawer,
@@ -17,6 +17,14 @@ export const Sidebar = ({
   isNonMobile,
 }) => {
   const theme = useTheme();
+
+  useEffect(() => {
+    if (!isNonMobile) {
+      setIsSidebarOpen(false);
+    } else {
+      setIsSidebarOpen(true);
+    }
+  }, [isNonMobile]);
 
   return (
     <Box component="nav" className="animate__animated animate__fadeIn animate__faster">

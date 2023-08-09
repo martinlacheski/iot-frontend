@@ -12,6 +12,11 @@ import {
   List,
   ListItem,
 } from "@mui/material";
+import {
+  ModeEditOutlineOutlined,
+  DeleteOutlineOutlined,
+  VisibilityOutlined,
+} from "@mui/icons-material";
 import { FlexBetween } from "../../components/FlexBetween";
 import {
   showSuccessToast,
@@ -85,39 +90,39 @@ export const Environments = () => {
         fetchEnvironments();
       }
     } catch (error) {
-      showErrorAlert("Error al eliminar el ambiente");
+      showErrorAlert(error.response.data?.msg);
     }
   };
 
   const columns = [
-    { field: "_id", headerName: "ID", width: 150 },
-    { field: "name", headerName: "Ambiente", width: 220 },
+    { field: "_id", headerName: "ID", width: 200, hide: true },
+    { field: "name", headerName: "Ambiente", minWidth: 150, flex: 1 },
     {
       field: "typeOfEnvironment.name",
       headerName: "Tipo",
-      width: 100,
+      minWidth: 150,
       valueGetter: (params) => params.row.typeOfEnvironment.name,
     },
     {
       field: "branch.name",
       headerName: "Sede",
-      width: 180,
+      minWidth: 200,
       valueGetter: (params) => params.row.branch.name,
     },
     {
       field: "floor",
       headerName: "Piso",
-      width: 75,
+      minWidth: 75,
     },
     {
       field: "room",
       headerName: "Salón",
-      width: 75,
+      minWidth: 75,
     },
     {
       field: "capacity",
       headerName: "Capacidad",
-      width: 120,
+      minWidth: 120,
       renderCell: (params) => (
         <Box>
           {params.row.capacity ? params.row.capacity + " personas" : ""}{" "}
@@ -127,7 +132,7 @@ export const Environments = () => {
     {
       field: "surface",
       headerName: "Superficie",
-      width: 100,
+      minWidth: 100,
       renderCell: (params) => (
         <Box>{params.row.surface ? params.row.surface + " m²" : ""}</Box>
       ),
@@ -135,7 +140,7 @@ export const Environments = () => {
     {
       field: "equipments",
       headerName: "Equipamiento",
-      width: 150,
+      minWidth: 150,
       renderCell: (params) => (
         <Box>
           {params.row.equipments.length > 0
@@ -147,31 +152,42 @@ export const Environments = () => {
     {
       field: "actions",
       headerName: "Acciones",
-      minWidth: 200,
-      flex: 1,
+      minWidth: 230,
       renderCell: (params) => (
         <Box
           sx={{
             display: "flex",
-            gap: "1rem",
+            gap: ".5rem",
           }}
         >
-          <Button variant="outlined" color="primary" onClick={() => navigate(`/parameters/environments/update/${params.row._id}`)}>
-            Editar
+          <Button
+            title="Editar ambiente"
+            size="small"
+            variant="outlined"
+            color="primary"
+            onClick={() =>
+              navigate(`/parameters/environments/update/${params.row._id}`)
+            }
+          >
+            <ModeEditOutlineOutlined />
           </Button>
           <Button
+            title="Eliminar ambiente"
+            size="small"
             variant="outlined"
             color="secondary"
             onClick={() => handleDelete(params.row._id)}
           >
-            Eliminar
+            <DeleteOutlineOutlined />
           </Button>
           <Button
-            variant="contained"
-            color="secondary"
+            title="Ver detalles"
+            size="small"
+            variant="outlined"
+            color="primary"
             onClick={() => showDetails(params.row._id)}
           >
-            Ver
+            <VisibilityOutlined />
           </Button>
         </Box>
       ),
@@ -216,7 +232,7 @@ export const Environments = () => {
             color="primary"
             onClick={() => navigate("/parameters/environments/create")}
           >
-            Crear AMBIENTE
+            Crear ambiente
           </Button>
         </FlexBetween>
         <DataGrid

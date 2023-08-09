@@ -16,6 +16,10 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
+import {
+  ModeEditOutlineOutlined,
+  DeleteOutlineOutlined,
+} from "@mui/icons-material";
 import { useForm } from "../../../hooks/useForm";
 import { FlexBetween } from "../../components/FlexBetween";
 import {
@@ -50,7 +54,6 @@ export const Provinces = () => {
     nameValid,
     countryIdValid,
     isFormValid,
-    onResetForm,
   } = useForm(formData, formValidations);
 
   // OBTENER PROVINCIAS
@@ -163,18 +166,18 @@ export const Provinces = () => {
   };
 
   const columns = [
-    { field: "_id", headerName: "ID", flex: 0.5 },
-    { field: "name", headerName: "Nombre", flex: 0.5 },
+    { field: "_id", headerName: "ID", width: 200, hide: true },
+    { field: "name", headerName: "Nombre", minWidth: 200, flex: 1 },
     {
       field: "country.name", // Esto debe cambiarse a:
       headerName: "País",
-      flex: 0.5,
+      minWidth: 200,
       valueGetter: (params) => params.row.country.name, // Utiliza valueGetter para acceder a propiedades anidadas
     },
     {
       field: "actions",
       headerName: "Acciones",
-      flex: 0.5,
+      width: 160,
       renderCell: (params) => (
         <Box
           sx={{
@@ -183,18 +186,22 @@ export const Provinces = () => {
           }}
         >
           <Button
+            size="small"
+            title="Editar provincia"
             variant="outlined"
             color="primary"
             onClick={() => handleEditProvince(params.row._id)}
           >
-            Editar
+            <ModeEditOutlineOutlined />
           </Button>
           <Button
+            size="small"
+            title="Eliminar provincia"
             variant="outlined"
             color="secondary"
             onClick={() => handleDelete(params.row._id)}
           >
-            Eliminar
+            <DeleteOutlineOutlined />
           </Button>
         </Box>
       ),
@@ -234,6 +241,7 @@ export const Provinces = () => {
             Listado de provincias
           </Typography>
           <Button
+            title="Crear provincia"
             variant="contained"
             color="primary"
             onClick={handleOpenModal}
@@ -308,6 +316,7 @@ export const Provinces = () => {
                 value={name}
                 onChange={onInputChange}
                 fullWidth
+                autoComplete="off"
                 error={!!nameValid && formSubmitted}
                 helperText={!!nameValid && formSubmitted ? nameValid : ""}
               />

@@ -16,6 +16,10 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
+import {
+  ModeEditOutlineOutlined,
+  DeleteOutlineOutlined,
+} from "@mui/icons-material";
 import { useForm } from "../../../hooks/useForm";
 import { FlexBetween } from "../../components/FlexBetween";
 import {
@@ -51,12 +55,9 @@ export const Branches = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [editBranchId, setEditBranchId] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
 
   const {
     formState,
-    organizationId,
-    organizationIdValid,
     name,
     nameValid,
     cityId,
@@ -69,7 +70,6 @@ export const Branches = () => {
     phoneValid,
     isFormValid,
     onInputChange,
-    onResetForm,
     setFormState,
   } = useForm(formData, formValidations);
 
@@ -199,18 +199,18 @@ export const Branches = () => {
   };
 
   const columns = [
-    { field: "_id", headerName: "ID", minWidth: 250 },
-    { field: "name", headerName: "Sede", minWidth: 200 },
+    { field: "_id", headerName: "ID", width: 200, hide: true },
+    { field: "name", headerName: "Sede", minWidth: 200, flex: 1 },
     {
       field: "organization.name", // Esto debe cambiarse a:
       headerName: "Organización",
-      minWidth: 200,
+      minWidth: 180,
       valueGetter: (params) => params.row.organization.name, // Utiliza valueGetter para acceder a propiedades anidadas
     },
     {
       field: "city.name", // Esto debe cambiarse a:
       headerName: "Ciudad",
-      minWidth: 150,
+      minWidth: 180,
       valueGetter: (params) => params.row.city.name, // Utiliza valueGetter para acceder a propiedades anidadas
     },
     { field: "address", headerName: "Dirección", minWidth: 250 },
@@ -218,8 +218,7 @@ export const Branches = () => {
     {
       field: "actions",
       headerName: "Acciones",
-      minWidth: 200,
-      flex: 1,
+      minWidth: 160,
       renderCell: (params) => (
         <Box
           sx={{
@@ -228,18 +227,22 @@ export const Branches = () => {
           }}
         >
           <Button
+            title="Editar sede"
+            size="small"
             variant="outlined"
             color="primary"
             onClick={() => handleEditBranch(params.row._id)}
           >
-            Editar
+            <ModeEditOutlineOutlined />
           </Button>
           <Button
+            title="Eliminar sede"
+            size="small"
             variant="outlined"
             color="secondary"
             onClick={() => deleteBranch(params.row._id)}
           >
-            Eliminar
+            <DeleteOutlineOutlined />
           </Button>
         </Box>
       ),
@@ -279,6 +282,7 @@ export const Branches = () => {
             Listado de sedes
           </Typography>
           <Button
+            title="Crear sede"
             variant="contained"
             color="primary"
             onClick={handleOpenModal}

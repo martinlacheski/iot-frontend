@@ -16,6 +16,10 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
+import {
+  ModeEditOutlineOutlined,
+  DeleteOutlineOutlined,
+} from "@mui/icons-material";
 import { useForm } from "../../../hooks/useForm";
 import { FlexBetween } from "../../components/FlexBetween";
 import {
@@ -166,24 +170,26 @@ export const Sensors = () => {
   };
 
   const columns = [
-    { field: "_id", headerName: "ID", width: 200 },
-    { field: "name", headerName: "Nombre", width: 250 },
+    { field: "_id", headerName: "ID", width: 200, hide: true },
+    { field: "name", headerName: "Nombre", minWidth: 200, flex: 1 },
     {
       field: "typeOfSensor.name",
       headerName: "Tipo de sensor",
-      width: 250,
+      minWidth: 250,
+      flex: 0.5,
       valueGetter: (params) => params.row.typeOfSensor.name,
     },
     {
       field: "board.name",
       headerName: "Placa",
-      width: 250,
+      minWidth: 250,
+      flex: 0.5,
       valueGetter: (params) => params.row.board.name,
     },
     {
       field: "actions",
       headerName: "Acciones",
-      width: 300,
+      width: 160,
       renderCell: (params) => (
         <Box
           sx={{
@@ -192,18 +198,22 @@ export const Sensors = () => {
           }}
         >
           <Button
+            title="Editar sensor"
+            size="small"
             variant="contained"
             color="primary"
             onClick={() => handleEditSensor(params.row._id)}
           >
-            Editar
+            <ModeEditOutlineOutlined />
           </Button>
           <Button
+            title="Eliminar sensor"
+            size="small"
             variant="outlined"
             color="secondary"
             onClick={() => handleDeleteSensor(params.row._id)}
           >
-            Eliminar
+            <DeleteOutlineOutlined />
           </Button>
         </Box>
       ),
@@ -249,7 +259,7 @@ export const Sensors = () => {
             onClick={handleOpenModal}
             sx={{ p: ".3rem 1rem" }}
           >
-            Crear placa
+            Crear sensor
           </Button>
         </FlexBetween>
         <DataGrid
