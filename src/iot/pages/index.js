@@ -1,4 +1,5 @@
 export * from './Main';
+export * from './EnergyConsumption';
 
 
 

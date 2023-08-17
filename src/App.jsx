@@ -1,10 +1,14 @@
 import { AppRouter } from "./router/AppRouter";
 import { AppTheme } from "./theme";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 function App() {
   return (
     <AppTheme>
-      <AppRouter />
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <AppRouter />
+      </LocalizationProvider>
     </AppTheme>
   );
 }

@@ -19,6 +19,8 @@ import {
   ReceiptLongOutlined,
   PublicOutlined,
   TuneOutlined,
+  SensorsOutlined,
+  BoltOutlined
 } from "@mui/icons-material";
 
 export const SidebarItems = () => {
@@ -126,13 +128,13 @@ const navItems = [
     icon: <DashboardOutlined />,
   },
   {
-    text: "Client Facing",
+    text: "Reportes y estadísticas",
     icon: null,
   },
   {
-    text: "Products",
-    url: "products",
-    icon: <ShoppingCartOutlined />,
+    text: "Consumo energético",
+    url: "energy-consumption",
+    icon: <BoltOutlined />,
   },
   {
     text: "Customers",

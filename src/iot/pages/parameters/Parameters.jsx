@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { Header } from "../../components/Header";
-import { Box, Typography, Grid, Divider, Button, List, ListItemButton, ListItemText } from "@mui/material";
+import { Box, Typography, Grid, Divider, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 
 export const Parameters = () => {
