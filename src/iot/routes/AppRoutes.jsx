@@ -19,7 +19,8 @@ import {
   Sensors,
   UpdateEnvironment,
   Users,
-  EnergyConsumption
+  EnergyConsumption,
+  Dashboard
 } from "../pages";
 
 const AppRoutes = () => {
@@ -27,7 +28,7 @@ const AppRoutes = () => {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route path="/" element={<Main />} />
-        <Route path="/dashboard" element={<h1>dashboard</h1>} />
+        <Route path="/dashboard" element={<Dashboard />} />
 
 
         <Route path="/energy-consumption" element={<EnergyConsumption />} />
