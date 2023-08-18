@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import Thermometer from "react-thermometer-component";
+import Thermometer from "react-thermometer-ecotropy";
 import GaugeComponent from "react-gauge-component";
 import { Typography, Box } from "@mui/material";
 import { io } from "socket.io-client";
@@ -56,7 +56,6 @@ export const TemperatureHumidityChart = () => {
           format="°C"
           size="medium"
           height="250"
-          reverseGradient
         />
       </Box>
       <Box
