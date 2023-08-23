@@ -36,10 +36,7 @@ import {
   PowerOutlined,
   PictureAsPdfOutlined,
 } from "@mui/icons-material";
-import {
-  showSuccessToast,
-  showErrorAlert,
-} from "../../utils";
+import { showSuccessToast, showErrorAlert } from "../../utils";
 import { getDatetimeString } from "../../helpers/getDateTimeString";
 
 ChartJS.register(
@@ -169,6 +166,7 @@ export const EnergyConsumption = () => {
     setPowerChartData({});
     setPfChartData({});
     setConsumption({});
+
     // VALIDACIONES BÁSICAS
     if (!selectedEnvironment || !fromDate || !toDate) {
       showErrorAlert("¡Todos los campos son obligatorios!");
@@ -181,16 +179,16 @@ export const EnergyConsumption = () => {
       return;
     }
 
-    const params = {
+    const queryParams = new URLSearchParams({
       fromDate: getDatetimeString(new Date(fromDate)),
       toDate: getDatetimeString(new Date(toDate)),
-      diffInHours: Math.abs(toDate - fromDate) / 36e5,
-    };
+    });
 
     try {
-      const { data } = await iotApi.get("/reports/energy-consumption/resume", {
-        params,
-      });
+      const { data } = await iotApi.get(
+        `/reports/energy-consumption/resume/?${queryParams}`
+      );
+      
       showSuccessToast("¡Reporte generado con éxito!");
       if (!data) return;
 
@@ -431,7 +429,7 @@ export const EnergyConsumption = () => {
             <Grid item xs={4} md={1}>
               <Button
                 title="Exportar reporte"
-                variant="contained" 
+                variant="contained"
                 color="error"
                 sx={{ height: "100%", width: "100%", gap: 0.5 }}
                 size="small"
