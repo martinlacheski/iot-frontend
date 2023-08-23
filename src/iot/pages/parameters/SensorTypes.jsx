@@ -231,6 +231,8 @@ export const SensorTypes = () => {
           </Button>
         </FlexBetween>
         <DataGrid
+          autoHeight
+          maxHeight="100%"
           loading={!sensorTypes}
           rows={sensorTypes}
           columns={columns}

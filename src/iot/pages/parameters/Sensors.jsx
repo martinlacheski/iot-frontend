@@ -30,12 +30,17 @@ import {
 
 const formData = {
   name: "",
+  minutesToStored: "",
   typeOfSensorId: "",
   boardId: "",
 };
 
 const formValidations = {
   name: [(value) => value.trim() !== "", "El nombre es obligatorio"],
+  minutesToStored: [
+    (value) => parseInt(value) > 0,
+    "El intervalo de almacenado debe ser mayor a 0",
+  ],
   typeOfSensorId: [
     (value) => value.trim() !== "",
     "El tipo de sensor es obligatorio",
@@ -55,6 +60,8 @@ export const Sensors = () => {
     formState,
     name,
     nameValid,
+    minutesToStored,
+    minutesToStoredValid,
     typeOfSensorId,
     typeOfSensorIdValid,
     boardId,
@@ -126,6 +133,7 @@ export const Sensors = () => {
     setEditSensorId(sensorId);
     setFormState({
       name: sensor.name,
+      minutesToStored: sensor.minutesToStored,
       typeOfSensorId: sensor.typeOfSensor._id,
       boardId: sensor.board._id,
     });
@@ -171,7 +179,14 @@ export const Sensors = () => {
 
   const columns = [
     { field: "_id", headerName: "ID", width: 200, hide: true },
-    { field: "name", headerName: "Nombre", minWidth: 200, flex: 1 },
+    { field: "name", headerName: "Nombre", minWidth: 200, flex: 0.6 },
+    {
+      field: "minutesToStored",
+      headerName: "Intervalo de almacenado",
+      minWidth: 100,
+      flex: 0.4,
+      valueGetter: (params) => params.row.minutesToStored + " minutos",
+    },
     {
       field: "typeOfSensor.name",
       headerName: "Tipo de sensor",
@@ -264,7 +279,7 @@ export const Sensors = () => {
         </FlexBetween>
         <DataGrid
           // autoHeight
-          maxHeight="60vh"
+          maxHeight="100vh"
           loading={!sensors}
           rows={sensors}
           columns={columns}
@@ -311,6 +326,23 @@ export const Sensors = () => {
               />
             </Grid>
             <Grid item xs={12}>
+              <TextField
+                label="Intervalo de almacenado en minutos (default: 5)"
+                type="number"
+                InputProps={{ inputProps: { min: 1 } }}
+                name="minutesToStored"
+                value={minutesToStored}
+                onChange={onInputChange}
+                fullWidth
+                error={!!minutesToStoredValid && formSubmitted}
+                helperText={
+                  !!minutesToStoredValid && formSubmitted
+                    ? minutesToStoredValid
+                    : ""
+                }
+              />
+            </Grid>
+            <Grid item xs={12}>
               <FormControl
                 fullWidth
                 error={!!typeOfSensorIdValid && formSubmitted}
@@ -340,16 +372,9 @@ export const Sensors = () => {
               </FormControl>
             </Grid>
             <Grid item xs={12}>
-              <FormControl
-                fullWidth
-                error={!!boardIdValid && formSubmitted}
-              >
+              <FormControl fullWidth error={!!boardIdValid && formSubmitted}>
                 <InputLabel>Placa asociada</InputLabel>
-                <Select
-                  name="boardId"
-                  value={boardId}
-                  onChange={onInputChange}
-                >
+                <Select name="boardId" value={boardId} onChange={onInputChange}>
                   <MenuItem value="">
                     <em>Seleccionar placa</em>
                   </MenuItem>
@@ -361,9 +386,7 @@ export const Sensors = () => {
                 </Select>
                 {!!boardIdValid && formSubmitted && (
                   <Alert severity="error" sx={{ mt: ".5rem" }}>
-                    <Typography variant="body2">
-                      {boardIdValid}
-                    </Typography>
+                    <Typography variant="body2">{boardIdValid}</Typography>
                   </Alert>
                 )}
               </FormControl>
