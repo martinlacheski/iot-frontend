@@ -15,6 +15,7 @@ export const AmbientNoiseChart = () => {
     const socket = io(VITE_SOCKET_URL);
 
     socket.on("ambientNoise", (data) => {
+      if (!data.data.timestamp) return;
       setData(data.sensor.level);
     });
 

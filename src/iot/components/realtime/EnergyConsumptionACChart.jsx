@@ -80,6 +80,10 @@ export const EnergyConsumptionACChart = () => {
     const socket = io(VITE_SOCKET_URL);
 
     socket.on("pzemAC", (data) => {
+      if (!data.data.timestamp) {
+        console.log("pzemAC: ", data);
+        return;
+      }
       setChartData((prevState) => {
         const updatedLabels = [
           ...prevState.labels,

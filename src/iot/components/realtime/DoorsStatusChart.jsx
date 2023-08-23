@@ -11,6 +11,7 @@ export const DoorsStatusChart = () => {
     const socket = io(VITE_SOCKET_URL);
 
     socket.on("doorsStatus", (data) => {
+      if (!data.data.timestamp) return;
       setData(data.sensor.areOpen);
     });
 

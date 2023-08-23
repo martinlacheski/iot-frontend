@@ -15,6 +15,7 @@ export const MonoxideCarbonGasChart = () => {
     const socket = io(VITE_SOCKET_URL);
 
     socket.on("carbonMonoxide", (data) => {
+      if (!data.data.timestamp) return;
       setData(data.sensor.ppm);
     });
 

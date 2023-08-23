@@ -15,6 +15,7 @@ export const FlammableGasChart = () => {
     const socket = io(VITE_SOCKET_URL);
 
     socket.on("flammableGases", (data) => {
+      if (!data.data.timestamp) return;
       setData(data.sensor.ppm);
     });
 

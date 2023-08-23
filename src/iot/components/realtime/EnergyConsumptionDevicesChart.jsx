@@ -80,6 +80,10 @@ export const EnergyConsumptionDevicesChart = () => {
     const socket = io(VITE_SOCKET_URL);
 
     socket.on("pzemDevices", (data) => {
+      if (!data.data.timestamp) {
+        console.log("pzemDevices: ", data);
+        return;
+      }
       setChartData((prevState) => {
         const updatedLabels = [
           ...prevState.labels,

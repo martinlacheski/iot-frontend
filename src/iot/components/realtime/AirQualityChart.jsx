@@ -15,6 +15,7 @@ export const AirQualityChart = () => {
     const socket = io(VITE_SOCKET_URL);
 
     socket.on("airQuality", (data) => {
+      if (!data.data.timestamp) return;
       setData(data.sensor.ppm);
     });
 

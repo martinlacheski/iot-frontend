@@ -11,6 +11,7 @@ export const WindowsStatusChart = () => {
     const socket = io(VITE_SOCKET_URL);
 
     socket.on("windowsStatus", (data) => {
+      if (!data.data.timestamp) return;
       setData(data.sensor.areOpen);
     });
 

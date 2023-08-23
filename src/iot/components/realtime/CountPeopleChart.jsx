@@ -24,6 +24,7 @@ export const CountPeopleChart = () => {
     const socket = io(VITE_SOCKET_URL);
 
     socket.on("countPeople", (data) => {
+      if (!data.data.timestamp) return;
       setData(data.sensor.count);
     });
 

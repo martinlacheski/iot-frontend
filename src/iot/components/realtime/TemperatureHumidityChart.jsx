@@ -17,6 +17,7 @@ export const TemperatureHumidityChart = () => {
     const socket = io(VITE_SOCKET_URL);
 
     socket.on("tempAndHumidity", (data) => {
+      if (!data.data.timestamp) return;
       const temp = Math.round(data.sensor.temperature * 10) / 10;
       const hum = Math.round(data.sensor.humidity * 10) / 10;
       setTemperature(temp);

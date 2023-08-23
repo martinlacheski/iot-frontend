@@ -15,6 +15,7 @@ export const ExternalLightingChart = () => {
     const socket = io(VITE_SOCKET_URL);
 
     socket.on("externalLuminosity", (data) => {
+      if (!data.data.timestamp) return;
       setData(data.sensor.level);
     });
 

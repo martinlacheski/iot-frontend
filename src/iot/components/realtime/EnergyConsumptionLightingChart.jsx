@@ -80,6 +80,10 @@ export const EnergyConsumptionLightingChart = () => {
     const socket = io(VITE_SOCKET_URL);
 
     socket.on("pzemLigthing", (data) => {
+      if (!data.data.timestamp) {
+        console.log("pzemLigthing: ", data);
+        return;
+      }
       setChartData((prevState) => {
         const updatedLabels = [
           ...prevState.labels,
@@ -102,6 +106,9 @@ export const EnergyConsumptionLightingChart = () => {
           ],
         };
       });
+      setCurrent(data.sensor.current);
+      setPowerFactor(data.sensor.pf);
+      setVoltage(Math.round(data.sensor.voltage * 100) / 100);
     });
 
     return () => {
