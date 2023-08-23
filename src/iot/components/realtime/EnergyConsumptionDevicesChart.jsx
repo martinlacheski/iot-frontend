@@ -80,19 +80,29 @@ export const EnergyConsumptionDevicesChart = () => {
     const socket = io(VITE_SOCKET_URL);
 
     socket.on("pzemDevices", (data) => {
-      setChartData((prevState) => ({
-        ...prevState,
-        labels: [...prevState.labels, data.data.timestamp.slice(11, 19)],
-        datasets: [
-          {
-            ...prevState.datasets[0],
-            data: [
-              ...prevState.datasets[0].data,
-              data.sensor.power + random(200, 500),
-            ],
-          },
-        ],
-      }));
+      setChartData((prevState) => {
+        const updatedLabels = [
+          ...prevState.labels,
+          data.data.timestamp.slice(11, 19),
+        ];
+        const updatedData = [
+          ...prevState.datasets[0].data.slice(
+            Math.max(0, prevState.datasets[0].data.length - 12)
+          ),
+          data.sensor.power + random(200, 500),
+        ];
+
+        return {
+          labels: updatedLabels.slice(Math.max(0, updatedLabels.length - 12)),
+          datasets: [
+            {
+              ...prevState.datasets[0],
+              data: updatedData,
+            },
+          ],
+        };
+      });
+
       setCurrent(data.sensor.current);
       setPowerFactor(data.sensor.pf);
       setVoltage(Math.round(data.sensor.voltage * 100) / 100);
