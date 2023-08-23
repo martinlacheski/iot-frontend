@@ -37,7 +37,7 @@ export const MonoxideCarbonGasChart = () => {
         maxValue={max}
         arc={{
           subArcs: [
-            { limit: max * 0.33, color: "#84cc16" },
+            { limit: max * 0.33, color: "#006600" },
             { limit: max * 0.66, color: "#f59e0b" },
             { color: "#b91c1c" },
           ],

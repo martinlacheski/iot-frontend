@@ -25,7 +25,7 @@ export const MovementDetectedChart = () => {
         variant="h6"
         textAlign={"center"}
         sx={{ my: ".5rem", fontSize: "14px", textTransform: "uppercase" }}
-        color={data ? "#84cc16" : "#b91c1c"}
+        color={data ? "#006600" : "#b91c1c"}
       >
         {data ? "Detectado" : "No detectado"}
       </Typography>

@@ -1,8 +1,3 @@
-export * from './VoltageChart'; 
-export * from './CurrentChart';
-export * from './PowerChart';
-export * from './PfChart';
-
 export * from './FlammableGasChart';
 export * from './MonoxideCarbonGasChart';
 export * from './NaturalGasChart';
@@ -19,3 +14,9 @@ export * from './CountPeopleChart';
 
 export * from './MovementDetectedChart';
 export * from './AmbientNoiseChart';
+
+// export * from './ACConsumptionChart';
+export * from './EnergyConsumptionACChart';
+export * from './EnergyConsumptionLightingChart';
+export * from './EnergyConsumptionDevicesChart';
+

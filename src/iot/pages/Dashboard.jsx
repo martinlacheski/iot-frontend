@@ -3,18 +3,8 @@ import {
   Box,
   Typography,
   Grid,
-  Divider,
-  Button,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
 } from "@mui/material";
 import {
-  VoltageChart,
-  CurrentChart,
-  PowerChart,
-  PfChart,
   FlammableGasChart,
   NaturalGasChart,
   MonoxideCarbonGasChart,
@@ -26,112 +16,216 @@ import {
   DoorsStatusChart,
   CountPeopleChart,
   MovementDetectedChart,
-  AmbientNoiseChart
+  AmbientNoiseChart,
+  EnergyConsumptionACChart,
+  EnergyConsumptionDevicesChart,
+  EnergyConsumptionLightingChart,
 } from "../components/realtime";
+import {
+  DirectionsWalk,
+  People,
+  SensorDoor,
+  SensorWindow,
+} from "@mui/icons-material";
 
 export const Dashboard = () => {
   return (
     <Box sx={{ p: "1.5rem" }}>
       <Fragment>
-        <Grid container spacing={2}>
+          {/* VARIABLES ELÉCTRICAS */}
+        <Grid container spacing={1}>
           <Grid item xs={12} md={4}>
-            <VoltageChart />
+            <EnergyConsumptionACChart />
           </Grid>
           <Grid item xs={12} md={4}>
-            <CurrentChart />
+            <EnergyConsumptionDevicesChart />
           </Grid>
           <Grid item xs={12} md={4}>
-            <PowerChart />
+            <EnergyConsumptionLightingChart />
           </Grid>
 
-          <Grid item xs={12}>
+          {/* GASES */}
+          <Grid item xs={12} md={8}>
             <Grid
               container
-              spacing={2}
               sx={{
-                mb: "1rem",
+                border: "1px solid #e0e0e0",
+                borderRadius: "5px",
+                backgroundColor: "#fff",
+                p: ".5rem",
               }}
             >
-              <Grid item xs={12} md={3}>
-                <FlammableGasChart />
-              </Grid>
               <Grid item xs={12} md={3}>
                 <AirQualityChart />
               </Grid>
               <Grid item xs={12} md={3}>
-                <NaturalGasChart />
+                <MonoxideCarbonGasChart />
               </Grid>
               <Grid item xs={12} md={3}>
-                <MonoxideCarbonGasChart />
+                <FlammableGasChart />
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <NaturalGasChart />
               </Grid>
             </Grid>
           </Grid>
 
+          {/* ILUMINACIÓN */}
           <Grid item xs={12} md={4}>
-            <Grid container spacing={2}>
+            <Grid
+              container
+              sx={{
+                border: "1px solid #e0e0e0",
+                borderRadius: "5px",
+                backgroundColor: "#fff",
+                mb: "1rem",
+                p: ".5rem",
+              }}
+            >
+              <Grid item xs={12} md={6}>
+                <ExternalLightingChart />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <InternalLightingChart />
+              </Grid>
+            </Grid>
+          </Grid>
+
+          {/* TEMPERATURA Y HUMEDAD */}
+          <Grid item xs={12} md={4}>
+            <Grid
+              container
+              sx={{
+                border: "1px solid #e0e0e0",
+                borderRadius: "5px",
+                backgroundColor: "#fff",
+                p: "1rem",
+                mt: "-.8rem",
+              }}
+            >
               <Grid item xs={12} justifyContent={"center"} display={"flex"}>
                 <TemperatureHumidityChart />
               </Grid>
             </Grid>
           </Grid>
 
-          <Grid item xs={12} md={4}>
-            <Box>
-              <Box sx={{ mb: "1rem" }} height={1}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} md={6}>
-                    <ExternalLightingChart />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <InternalLightingChart />
-                  </Grid>
-                </Grid>
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  gap: "1rem",
-                }}
-              >
-                <Box>
+          {/* PUERTAS, VENTANAS, PERSONAS, ETC */}
+          <Grid item xs={12} md={8}>
+            <Grid
+              container
+              sx={{
+                border: "1px solid #e0e0e0",
+                borderRadius: "5px",
+                backgroundColor: "#fff",
+                p: "1rem",
+                mt: {
+                  xs: ".2rem",
+                  md: "-.8rem",
+                },
+                gap: {
+                  xs: "2rem",
+                  md: "0",
+                },
+              }}
+            >
+              <Grid item xs={12} md={3}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    mb: "1rem",
+                    gap: ".5rem",
+                  }}
+                >
+                  <SensorDoor />
                   <Typography
                     variant="h6"
                     textAlign={"center"}
-                    sx={{ mt: "1rem", fontSize: "16px" }}
+                    sx={{ fontSize: "16px" }}
                   >
-                    Estado de puertas y ventanas
+                    Estado de puertas
                   </Typography>
-                  <Box>
-                    <WindowsStatusChart />
-                  </Box>
-                  <Box>
-                    <DoorsStatusChart />
-                  </Box>
                 </Box>
-                <Box>
-                  <Box>
-                    <CountPeopleChart />
-                  </Box>
+                <Box
+                  sx={{
+                    mb: "2rem",
+                  }}
+                >
+                  <DoorsStatusChart />
                 </Box>
-                <Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    mb: "1rem",
+                    gap: ".5rem",
+                  }}
+                >
+                  <SensorWindow />
                   <Typography
                     variant="h6"
                     textAlign={"center"}
-                    sx={{ mt: "1rem", fontSize: "16px" }}
+                    sx={{ fontSize: "16px" }}
+                  >
+                    Estado de ventanas
+                  </Typography>
+                </Box>
+                <Box>
+                  <WindowsStatusChart />
+                </Box>
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    mb: "1rem",
+                    gap: ".5rem",
+                  }}
+                >
+                  <People />
+                  <Typography
+                    variant="h6"
+                    textAlign={"center"}
+                    sx={{ fontSize: "16px" }}
+                  >
+                    Cantidad de personas
+                  </Typography>
+                </Box>
+                <Box>
+                  <CountPeopleChart />
+                </Box>
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    mb: "1rem",
+                    gap: ".5rem",
+                  }}
+                >
+                  <DirectionsWalk />
+                  <Typography
+                    variant="h6"
+                    textAlign={"center"}
+                    sx={{ fontSize: "16px" }}
                   >
                     Movimiento
                   </Typography>
-                  <Box>
-                    <MovementDetectedChart/>
-                  </Box>
                 </Box>
-              </Box>
-            </Box>
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <AmbientNoiseChart />
+                <Box>
+                  <MovementDetectedChart />
+                </Box>
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <AmbientNoiseChart />
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Fragment>

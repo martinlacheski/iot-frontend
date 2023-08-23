@@ -4,6 +4,7 @@ import GaugeComponent from "react-gauge-component";
 import { Typography, Box } from "@mui/material";
 import { io } from "socket.io-client";
 import { getEnvVariables } from "../../../helpers";
+import { Expand, Thermostat, WaterDrop } from "@mui/icons-material";
 
 const { VITE_SOCKET_URL } = getEnvVariables();
 
@@ -35,50 +36,85 @@ export const TemperatureHumidityChart = () => {
   return (
     <Box
       sx={{
-        display: "flex",
+        display: {
+          xs: "block",
+          md: "flex",
+        },
         alignItems: "center",
         justifyContent: "center",
       }}
     >
       <Box>
-        <Typography
-          variant="h6"
-          textAlign={"center"}
-          sx={{ fontSize: "16px", mb: "1rem" }}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            mb: "1rem",
+            gap: ".5rem",
+          }}
         >
-          Temperatura
-        </Typography>
-        <Thermometer
-          theme="light"
-          value={temperature}
-          max="50"
-          steps="2"
-          format="°C"
-          size="medium"
-          height="250"
-        />
+          <Thermostat />
+          <Typography
+            variant="h6"
+            textAlign={"center"}
+            sx={{ fontSize: "16px" }}
+          >
+            Temperatura
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            mb: {
+              xs: "1rem",
+              md: "0",
+            },
+          }}
+        >
+          <Thermometer
+            theme="light"
+            value={temperature}
+            max="50"
+            steps="2"
+            format="°C"
+            size="medium"
+            height="200"
+          />
+        </Box>
       </Box>
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          height: "100%",
         }}
       >
         <Box>
-          <Typography
-            variant="h6"
-            textAlign={"center"}
-            sx={{ fontSize: "16px", mb: "-1.5rem" }}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              mb: "-1.5rem",
+              justifyContent: "center",
+              gap: ".5rem",
+            }}
           >
-            Humedad relativa
-          </Typography>
+            <WaterDrop />
+            <Typography
+              variant="h6"
+              textAlign={"center"}
+              sx={{ fontSize: "16px" }}
+            >
+              Humedad
+            </Typography>
+          </Box>
 
           <GaugeComponent
             arc={{
               subArcs: [
-                { limit: 33, color: "#84cc16" },
+                { limit: 33, color: "#006600" },
                 { limit: 66, color: "#f59e0b" },
                 { color: "#b91c1c" },
               ],
@@ -102,18 +138,27 @@ export const TemperatureHumidityChart = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            justifyContent: "space-between",
+            mt: "1rem",
           }}
         >
-          <Typography
-            variant="h6"
-            textAlign={"center"}
-            sx={{ fontSize: "16px", mt: "1rem" }}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: ".5rem",
+            }}
           >
-            Presión atmosférica
-          </Typography>
-
-          {pressure}
+            <Expand />
+            <Typography
+              variant="h6"
+              textAlign={"center"}
+              sx={{ fontSize: "16px" }}
+            >
+              Presión atmosférica
+            </Typography>
+          </Box>
+          {pressure} hPa
         </Box>
       </Box>
     </Box>

@@ -39,7 +39,7 @@ export const ExternalLightingChart = () => {
           subArcs: [
             { limit: max * 0.33, color: "#b91c1c" },
             { limit: max * 0.66, color: "#f59e0b" },
-            { color: "#84cc16" },
+            { color: "#006600" },
           ],
         }}
         value={data}
