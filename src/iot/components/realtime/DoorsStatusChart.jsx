@@ -25,9 +25,9 @@ export const DoorsStatusChart = () => {
         variant="h6"
         textAlign={"center"}
         sx={{ my: ".5rem", fontSize: "14px" }}
-        color={data ? "#b91c1c" : "#84cc16"}
+        color={data ? "#b91c1c" : "#006600"}
       >
-        {data ? "Puerta/s abierta/s" : "Todas las puertas cerradas"}
+        {data ? "Puertas abiertas" : "Puertas cerradas"}
       </Typography>
     </Fragment>
   );

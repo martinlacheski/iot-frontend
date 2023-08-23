@@ -33,11 +33,12 @@ export const FlammableGasChart = () => {
         Gases inflamables
       </Typography>
       <GaugeComponent
+      
         minValue={min}
         maxValue={max}
         arc={{
           subArcs: [
-            { limit: max * 0.33, color: "#84cc16" },
+            { limit: max * 0.33, color: "#006600" },
             { limit: max * 0.66, color: "#f59e0b" },
             { color: "#b91c1c" },
           ],
@@ -52,6 +53,13 @@ export const FlammableGasChart = () => {
             },
             formatTextValue: (value) => `${value} ppm`,
           },
+        }}
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       />
     </Fragment>
