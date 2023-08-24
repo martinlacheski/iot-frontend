@@ -14,13 +14,9 @@ import {
 import {
   ChevronRightOutlined,
   DashboardOutlined,
-  ShoppingCartOutlined,
-  Groups2Outlined,
-  ReceiptLongOutlined,
-  PublicOutlined,
   TuneOutlined,
-  SensorsOutlined,
-  BoltOutlined
+  BoltOutlined,
+  Air,
 } from "@mui/icons-material";
 
 export const SidebarItems = () => {
@@ -137,19 +133,9 @@ const navItems = [
     icon: <BoltOutlined />,
   },
   {
-    text: "Customers",
-    url: "customers",
-    icon: <Groups2Outlined />,
-  },
-  {
-    text: "Transactions",
-    url: "transactions",
-    icon: <ReceiptLongOutlined />,
-  },
-  {
-    text: "Geography",
-    url: "geography",
-    icon: <PublicOutlined />,
+    text: "Calidad del aire",
+    url: "air-quality",
+    icon: <Air />,
   },
   {
     text: "Sistema",

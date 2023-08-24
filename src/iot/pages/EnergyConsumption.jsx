@@ -188,7 +188,7 @@ export const EnergyConsumption = () => {
       const { data } = await iotApi.get(
         `/reports/energy-consumption/resume/?${queryParams}`
       );
-      
+
       showSuccessToast("¡Reporte generado con éxito!");
       if (!data) return;
 
@@ -360,7 +360,7 @@ export const EnergyConsumption = () => {
         subtitle="Desde esta sección podrá generar reportes del consumo de energía eléctrica en un determinado ambiente."
       />
 
-      <Box sx={{ p: "0.5rem 2rem 1rem 2rem", backgroundColor: "white" }}>
+      <Box sx={{ p: "0.5rem 2rem 1.25rem 2rem", backgroundColor: "white" }}>
         <FlexBetween>
           <Grid container spacing={1} sx={{ width: "100%" }}>
             <Grid item xs={12} md={5}>
@@ -371,7 +371,13 @@ export const EnergyConsumption = () => {
                   value={selectedEnvironment}
                   onChange={(e) => setSelectedEnvironment(e.target.value)}
                   placeholder="Seleccione un ambiente de la lista"
-                  sx={{ backgroundColor: "white" }}
+                  sx={{
+                    backgroundColor: "white",
+                    // "& .MuiSelect-select": {
+                    //   minHeight: "1rem",
+                    //   height: "1rem",
+                    // },
+                  }}
                 >
                   {environments.map((environment) => (
                     <MenuItem key={environment._id} value={environment._id}>
@@ -388,7 +394,13 @@ export const EnergyConsumption = () => {
                 value={fromDate}
                 onChange={handleChangeFromDate}
                 label="Desde fecha"
-                sx={{ width: "100%", backgroundColor: "white" }}
+                sx={{
+                  width: "100%",
+                  backgroundColor: "white",
+                  // "& .MuiInputBase-input": {
+                  //   height: "1rem",
+                  // },
+                }}
               />
             </Grid>
             <Grid item xs={6} md={2}>
@@ -398,7 +410,13 @@ export const EnergyConsumption = () => {
                 value={toDate}
                 onChange={handleChangeToDate}
                 label="Hasta fecha"
-                sx={{ width: "100%", backgroundColor: "white" }}
+                sx={{
+                  width: "100%",
+                  backgroundColor: "white",
+                  // "& .MuiInputBase-input": {
+                  //   height: "1rem",
+                  // },
+                }}
               />
             </Grid>
             <Grid item xs={4} md={1}>
@@ -446,11 +464,11 @@ export const EnergyConsumption = () => {
           <Grid container spacing={1} sx={{ my: "1rem" }}>
             <Grid item xs={12}>
               <Typography variant="h6" sx={{ mb: "1rem" }}>
-                Consumo energético
+                Reporte de consumo energético 
                 {timeLapse && (
                   <span>
                     {" "}
-                    en <strong>{timeLapse}</strong>
+                    (lapso de <strong>{timeLapse}</strong>)
                   </span>
                 )}
               </Typography>

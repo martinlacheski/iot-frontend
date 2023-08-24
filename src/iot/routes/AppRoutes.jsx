@@ -20,7 +20,8 @@ import {
   UpdateEnvironment,
   Users,
   EnergyConsumption,
-  Dashboard
+  Dashboard,
+  AirQuality
 } from "../pages";
 
 const AppRoutes = () => {
@@ -32,8 +33,9 @@ const AppRoutes = () => {
 
 
         <Route path="/energy-consumption" element={<EnergyConsumption />} />
+        <Route path="/air-quality" element={<AirQuality />} />
         
-        
+  
         <Route path="/customers" element={<h1>customers</h1>} />
         <Route path="/transactions" element={<h1>transactions</h1>} />
         <Route path="/geography" element={<h1>geography</h1>} />
