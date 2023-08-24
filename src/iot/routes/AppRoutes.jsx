@@ -21,7 +21,8 @@ import {
   Users,
   EnergyConsumption,
   Dashboard,
-  AirQuality
+  AirQuality,
+  EnergyWaste
 } from "../pages";
 
 const AppRoutes = () => {
@@ -34,6 +35,7 @@ const AppRoutes = () => {
 
         <Route path="/energy-consumption" element={<EnergyConsumption />} />
         <Route path="/air-quality" element={<AirQuality />} />
+        <Route path="/energy-waste" element={<EnergyWaste />} />
         
   
         <Route path="/customers" element={<h1>customers</h1>} />

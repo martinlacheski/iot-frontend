@@ -93,7 +93,7 @@ export const EnergyConsumptionLightingChart = () => {
             Math.max(0, prevState.datasets[0].data.length - 12)
           ),
           // data.sensor.power + random(-10, 10),
-          data.sensor.power,
+          data.sensor.p,
         ];
 
         return {
@@ -106,9 +106,9 @@ export const EnergyConsumptionLightingChart = () => {
           ],
         };
       });
-      setCurrent(data.sensor.current);
+      setCurrent(data.sensor.c);
       setPowerFactor(data.sensor.pf);
-      setVoltage(Math.round(data.sensor.voltage * 100) / 100);
+      setVoltage(Math.round(data.sensor.v * 100) / 100);
     });
 
     return () => {

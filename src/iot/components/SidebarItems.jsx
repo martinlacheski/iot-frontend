@@ -17,6 +17,7 @@ import {
   TuneOutlined,
   BoltOutlined,
   Air,
+  MoodBad,
 } from "@mui/icons-material";
 
 export const SidebarItems = () => {
@@ -136,6 +137,11 @@ const navItems = [
     text: "Calidad del aire",
     url: "air-quality",
     icon: <Air />,
+  },
+  {
+    text: "Uso ineficiente de energía eléctrica",
+    url: "energy-waste",
+    icon: <MoodBad />,
   },
   {
     text: "Sistema",
