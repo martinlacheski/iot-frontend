@@ -54,7 +54,6 @@ const chartOptions = {
         },
       },
       min: 0,
-      max: 1000,
     },
   },
 };
@@ -93,7 +92,8 @@ export const EnergyConsumptionLightingChart = () => {
           ...prevState.datasets[0].data.slice(
             Math.max(0, prevState.datasets[0].data.length - 12)
           ),
-          data.sensor.power + random(200, 500),
+          // data.sensor.power + random(-10, 10),
+          data.sensor.power,
         ];
 
         return {
