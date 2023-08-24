@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useState } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -22,30 +22,6 @@ ChartJS.register(
   Filler,
   Legend
 );
-
-const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: "top",
-    },
-    title: {
-      display: false,
-      text: "Chart.js Line Chart",
-    },
-  },
-  scales: {
-    y: {
-      type: "linear",
-      display: true,
-      ticks: {
-        callback: function (value, index, values) {
-          return value + " ppm";
-        },
-      },
-    },
-  },
-};
 
 export const MQChart = ({ data }) => {
   const { title, labels, mins, maxs } = data;
