@@ -18,14 +18,14 @@ export const TemperatureHumidityChart = () => {
 
     socket.on("tempAndHumidity", (data) => {
       if (!data.data.timestamp) return;
-      const temp = Math.round(data.sensor.temperature * 10) / 10;
-      const hum = Math.round(data.sensor.humidity * 10) / 10;
+      const temp = Math.round(data.sensor.t * 10) / 10;
+      const hum = Math.round(data.sensor.h * 10) / 10;
       setTemperature(temp);
       setHumidity(hum);
     });
 
     socket.on("pressureAndTemp", (data) => {
-      const press = Math.round(data.sensor.pressure * 10) / 10;
+      const press = Math.round(data.sensor.p * 10) / 10;
       setPressure(press);
     });
 

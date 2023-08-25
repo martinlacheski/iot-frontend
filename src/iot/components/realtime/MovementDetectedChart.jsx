@@ -12,7 +12,7 @@ export const MovementDetectedChart = () => {
 
     socket.on("motionDetection", (data) => {
       if (!data.data.timestamp) return;
-      setData(data.sensor.movementDetected);
+      setData(data.sensor.m);
     });
 
     return () => {

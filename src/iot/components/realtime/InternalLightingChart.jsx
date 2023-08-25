@@ -16,7 +16,7 @@ export const InternalLightingChart = () => {
 
     socket.on("internalLuminosity", (data) => {
       if (!data.data.timestamp) return;
-      setData(data.sensor.level);
+      setData(data.sensor.l);
     });
 
     return () => {

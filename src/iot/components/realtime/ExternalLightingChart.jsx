@@ -16,7 +16,7 @@ export const ExternalLightingChart = () => {
 
     socket.on("externalLuminosity", (data) => {
       if (!data.data.timestamp) return;
-      setData(data.sensor.level);
+      setData(data.sensor.l);
     });
 
     return () => {

@@ -16,7 +16,7 @@ export const FlammableGasChart = () => {
 
     socket.on("flammableGases", (data) => {
       if (!data.data.timestamp) return;
-      setData(data.sensor.ppm);
+      setData(data.sensor.p);
     });
 
     return () => {

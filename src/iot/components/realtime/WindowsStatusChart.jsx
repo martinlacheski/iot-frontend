@@ -12,7 +12,7 @@ export const WindowsStatusChart = () => {
 
     socket.on("windowsStatus", (data) => {
       if (!data.data.timestamp) return;
-      setData(data.sensor.areOpen);
+      setData(data.sensor.o);
     });
 
     return () => {

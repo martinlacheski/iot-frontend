@@ -16,7 +16,7 @@ export const AirQualityChart = () => {
 
     socket.on("airQuality", (data) => {
       if (!data.data.timestamp) return;
-      setData(data.sensor.ppm);
+      setData(data.sensor.p);
     });
 
     return () => {
