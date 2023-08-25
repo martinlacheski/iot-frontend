@@ -18,6 +18,8 @@ import {
   BoltOutlined,
   Air,
   MoodBad,
+  MapsHomeWorkOutlined,
+  SecurityOutlined
 } from "@mui/icons-material";
 
 export const SidebarItems = () => {
@@ -142,6 +144,16 @@ const navItems = [
     text: "Uso ineficiente de energía eléctrica",
     url: "energy-waste",
     icon: <MoodBad />,
+  },
+  {
+    text: "Condiciones ambientales",
+    url: "environment-conditions",
+    icon: <MapsHomeWorkOutlined />,
+  },
+  {
+    text: "Seguridad y movimiento de personas",
+    url: "security-movement",
+    icon: <SecurityOutlined />,
   },
   {
     text: "Sistema",

@@ -9,7 +9,7 @@ const { VITE_SOCKET_URL } = getEnvVariables();
 export const AmbientNoiseChart = () => {
   const [data, setData] = useState(0);
   const min = 0;
-  const max = 1500;
+  const max = 120;
 
   useEffect(() => {
     const socket = io(VITE_SOCKET_URL);
