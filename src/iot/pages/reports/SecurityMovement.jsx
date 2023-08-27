@@ -1,19 +1,19 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Header } from "../components/Header";
-import { ReportsNavBar } from "../components/ReportsNavBar";
-import iotApi from "../../api/iotApi";
-import { showSuccessToast, showErrorAlert } from "../../utils";
-import { getDatetimeString } from "../../helpers/getDateTimeString";
-import { EnergyWasteChart } from "../components/charts";
+import { Header } from "../../components/Header";
+import { ReportsNavBar } from "../../components/ReportsNavBar";
+import iotApi from "../../../api/iotApi";
+import { showSuccessToast, showErrorAlert } from "../../../utils";
+import { getDatetimeString } from "../../../helpers/getDateTimeString";
 import { Box, Typography, Grid, Divider } from "@mui/material";
+import { SecurityMovementChart } from "../../components/charts";
 
-export const EnergyWaste = () => {
+export const SecurityMovement = () => {
   const [environments, setEnvironments] = useState([]);
   const [selectedEnvironment, setSelectedEnvironment] = useState("");
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [chartData, setChartData] = useState({});
+  const [tableData, setTableData] = useState([]);
 
   const fetchEnvironments = async () => {
     try {
@@ -31,7 +31,7 @@ export const EnergyWaste = () => {
   // SUBMIT
   const handleSubmit = async () => {
     setLoading(true);
-    
+
     // VALIDACIONES BÁSICAS
     if (!selectedEnvironment || !fromDate || !toDate) {
       showErrorAlert("¡Todos los campos son obligatorios!");
@@ -48,23 +48,17 @@ export const EnergyWaste = () => {
       fromDate: getDatetimeString(new Date(fromDate)),
       toDate: getDatetimeString(new Date(toDate)),
     });
+    // const queryParams = new URLSearchParams({
+    //   fromDate: '2023-08-26 17:00:00',
+    //   toDate: '2023-08-26 18:30:00',
+    // });
 
     try {
       const { data } = await iotApi.get(
-        `/reports/energy-waste/resume/?${queryParams}`
+        `/reports/security-movement/resume/?${queryParams}`
       );
-
-        console.log(data);
-
-      setChartData({
-        labels: data.labels,
-        dataAC: data.averagePowerAC,
-        dataLighting: data.averagePowerLighting,
-        dataDevices: data.averagePowerDevices,
-        dataMotionDetection: data.motionDetection,
-      });
+      setTableData(data);
       setLoading(false);
-
       showSuccessToast("¡Reporte generado con éxito!");
       if (!data) return;
     } catch (error) {
@@ -85,14 +79,14 @@ export const EnergyWaste = () => {
     setSelectedEnvironment("");
     setFromDate(null);
     setToDate(null);
-    setChartData({});
     setLoading(true);
   };
+
   return (
     <Fragment>
       <Header
-        title="Reporte de uso ineficiente de energía eléctrica"
-        subtitle="Desde esta sección podrá generar reportes de uso ineficiente de energía eléctrica de los ambientes de su organización."
+        title="Reporte de movimiento de personas y estado de puertas y ventanas"
+        subtitle="Desde esta sección podrá generar reportes de movimientos y estado de puertas y ventanas de los ambientes."
       />
 
       <ReportsNavBar
@@ -114,11 +108,13 @@ export const EnergyWaste = () => {
             px: "2rem",
           }}
         >
-          <Typography variant="h6" sx={{ mb: 1 }}>
-            Reporte de uso ineficiente de energía eléctrica
-          </Typography>
-          <Divider sx={{ mb: 2 }} />
-          <EnergyWasteChart chartData={chartData} />
+          <Fragment>
+            <Typography variant="h6" sx={{ mb: 1 }}>
+              Reporte de movimiento de personas y estado de puertas y ventanas
+            </Typography>
+            <Divider sx={{ mb: 2 }} />
+            <SecurityMovementChart data={tableData} />
+          </Fragment>
         </Box>
       )}
     </Fragment>

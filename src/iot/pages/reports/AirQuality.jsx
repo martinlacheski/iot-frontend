@@ -1,19 +1,22 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Header } from "../components/Header";
-import { ReportsNavBar } from "../components/ReportsNavBar";
-import iotApi from "../../api/iotApi";
-import { showSuccessToast, showErrorAlert } from "../../utils";
-import { getDatetimeString } from "../../helpers/getDateTimeString";
+import { Header } from "../../components/Header";
 import { Box, Typography, Grid, Divider } from "@mui/material";
-import { SecurityMovementChart } from "../components/charts";
+import iotApi from "../../../api/iotApi";
+import { showSuccessToast, showErrorAlert } from "../../../utils";
+import { getDatetimeString } from "../../../helpers/getDateTimeString";
+import { ReportsNavBar } from "../../components/ReportsNavBar";
+import { MQChart } from "../../components/charts";
 
-export const SecurityMovement = () => {
+export const AirQuality = () => {
   const [environments, setEnvironments] = useState([]);
   const [selectedEnvironment, setSelectedEnvironment] = useState("");
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
+  const [mq2, setMQ2] = useState({});
+  const [mq4, setMQ4] = useState({});
+  const [mq7, setMQ7] = useState({});
+  const [mq135, setMQ135] = useState({});
   const [loading, setLoading] = useState(true);
-  const [tableData, setTableData] = useState([]);
 
   const fetchEnvironments = async () => {
     try {
@@ -48,16 +51,15 @@ export const SecurityMovement = () => {
       fromDate: getDatetimeString(new Date(fromDate)),
       toDate: getDatetimeString(new Date(toDate)),
     });
-    // const queryParams = new URLSearchParams({
-    //   fromDate: '2023-08-26 17:00:00',
-    //   toDate: '2023-08-26 18:30:00',
-    // });
 
     try {
       const { data } = await iotApi.get(
-        `/reports/security-movement/resume/?${queryParams}`
+        `/reports/gases/resume/?${queryParams}`
       );
-      setTableData(data);
+      setMQ2(data.mq2);
+      setMQ4(data.mq4);
+      setMQ7(data.mq7);
+      setMQ135(data.mq135);
       setLoading(false);
       showSuccessToast("¡Reporte generado con éxito!");
       if (!data) return;
@@ -79,14 +81,18 @@ export const SecurityMovement = () => {
     setSelectedEnvironment("");
     setFromDate(null);
     setToDate(null);
+    setMQ2({});
+    setMQ4({});
+    setMQ7({});
+    setMQ135({});
     setLoading(true);
   };
 
   return (
     <Fragment>
       <Header
-        title="Reporte de movimiento de personas y estado de puertas y ventanas"
-        subtitle="Desde esta sección podrá generar reportes de movimientos y estado de puertas y ventanas de los ambientes."
+        title="Reporte de calidad de aire"
+        subtitle="Desde esta sección podrá generar reportes de calidad de aire de los ambientes de su organización."
       />
 
       <ReportsNavBar
@@ -110,10 +116,24 @@ export const SecurityMovement = () => {
         >
           <Fragment>
             <Typography variant="h6" sx={{ mb: 1 }}>
-              Reporte de movimiento de personas y estado de puertas y ventanas
+              Reporte de calidad de aire
             </Typography>
             <Divider sx={{ mb: 2 }} />
-            <SecurityMovementChart data={tableData} />
+
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={6}>
+                <MQChart data={mq2} />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <MQChart data={mq4} />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <MQChart data={mq7} />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <MQChart data={mq135} />
+              </Grid>
+            </Grid>
           </Fragment>
         </Box>
       )}

@@ -1,17 +1,17 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Header } from "../components/Header";
-import { ReportsNavBar } from "../components/ReportsNavBar";
-import iotApi from "../../api/iotApi";
-import { showSuccessToast, showErrorAlert } from "../../utils";
-import { getDatetimeString } from "../../helpers/getDateTimeString";
+import { Header } from "../../components/Header";
+import { ReportsNavBar } from "../../components/ReportsNavBar";
+import iotApi from "../../../api/iotApi";
+import { showSuccessToast, showErrorAlert } from "../../../utils";
+import { getDatetimeString } from "../../../helpers/getDateTimeString";
 import {
   TemperatureChart,
   HumidityChart,
   PressureChart,
   LuminosityChart,
-} from "../components/charts";
+} from "../../components/charts";
 import { Box, Typography, Grid, Divider } from "@mui/material";
-import { AmbientNoiseChart } from "../components/charts/AmbientNoiseChart";
+import { AmbientNoiseChart } from "../../components/charts/AmbientNoiseChart";
 
 export const EnvironmentConditions = () => {
   const [environments, setEnvironments] = useState([]);

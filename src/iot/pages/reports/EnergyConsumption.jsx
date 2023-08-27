@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Header } from "../components/Header";
+import { Header } from "../../components/Header";
 
 // Graficos
 import {
@@ -26,8 +26,8 @@ import {
   InputLabel,
 } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
-import { FlexBetween } from "../components/FlexBetween";
-import iotApi from "../../api/iotApi";
+import { FlexBetween } from "../../components/FlexBetween";
+import iotApi from "../../../api/iotApi";
 import {
   EditNoteOutlined,
   RestartAltOutlined,
@@ -36,8 +36,8 @@ import {
   PowerOutlined,
   PictureAsPdfOutlined,
 } from "@mui/icons-material";
-import { showSuccessToast, showErrorAlert } from "../../utils";
-import { getDatetimeString } from "../../helpers/getDateTimeString";
+import { showSuccessToast, showErrorAlert } from "../../../utils";
+import { getDatetimeString } from "../../../helpers/getDateTimeString";
 
 ChartJS.register(
   CategoryScale,

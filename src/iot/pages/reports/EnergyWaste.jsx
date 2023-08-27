@@ -1,22 +1,19 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Header } from "../components/Header";
+import { Header } from "../../components/Header";
+import { ReportsNavBar } from "../../components/ReportsNavBar";
+import iotApi from "../../../api/iotApi";
+import { showSuccessToast, showErrorAlert } from "../../../utils";
+import { getDatetimeString } from "../../../helpers/getDateTimeString";
+import { EnergyWasteChart } from "../../components/charts";
 import { Box, Typography, Grid, Divider } from "@mui/material";
-import iotApi from "../../api/iotApi";
-import { showSuccessToast, showErrorAlert } from "../../utils";
-import { getDatetimeString } from "../../helpers/getDateTimeString";
-import { ReportsNavBar } from "../components/ReportsNavBar";
-import { MQChart } from "../components/charts";
 
-export const AirQuality = () => {
+export const EnergyWaste = () => {
   const [environments, setEnvironments] = useState([]);
   const [selectedEnvironment, setSelectedEnvironment] = useState("");
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
-  const [mq2, setMQ2] = useState({});
-  const [mq4, setMQ4] = useState({});
-  const [mq7, setMQ7] = useState({});
-  const [mq135, setMQ135] = useState({});
   const [loading, setLoading] = useState(true);
+  const [chartData, setChartData] = useState({});
 
   const fetchEnvironments = async () => {
     try {
@@ -34,7 +31,7 @@ export const AirQuality = () => {
   // SUBMIT
   const handleSubmit = async () => {
     setLoading(true);
-
+    
     // VALIDACIONES BÁSICAS
     if (!selectedEnvironment || !fromDate || !toDate) {
       showErrorAlert("¡Todos los campos son obligatorios!");
@@ -54,13 +51,20 @@ export const AirQuality = () => {
 
     try {
       const { data } = await iotApi.get(
-        `/reports/gases/resume/?${queryParams}`
+        `/reports/energy-waste/resume/?${queryParams}`
       );
-      setMQ2(data.mq2);
-      setMQ4(data.mq4);
-      setMQ7(data.mq7);
-      setMQ135(data.mq135);
+
+        console.log(data);
+
+      setChartData({
+        labels: data.labels,
+        dataAC: data.averagePowerAC,
+        dataLighting: data.averagePowerLighting,
+        dataDevices: data.averagePowerDevices,
+        dataMotionDetection: data.motionDetection,
+      });
       setLoading(false);
+
       showSuccessToast("¡Reporte generado con éxito!");
       if (!data) return;
     } catch (error) {
@@ -81,18 +85,14 @@ export const AirQuality = () => {
     setSelectedEnvironment("");
     setFromDate(null);
     setToDate(null);
-    setMQ2({});
-    setMQ4({});
-    setMQ7({});
-    setMQ135({});
+    setChartData({});
     setLoading(true);
   };
-
   return (
     <Fragment>
       <Header
-        title="Reporte de calidad de aire"
-        subtitle="Desde esta sección podrá generar reportes de calidad de aire de los ambientes de su organización."
+        title="Reporte de uso ineficiente de energía eléctrica"
+        subtitle="Desde esta sección podrá generar reportes de uso ineficiente de energía eléctrica de los ambientes de su organización."
       />
 
       <ReportsNavBar
@@ -114,27 +114,11 @@ export const AirQuality = () => {
             px: "2rem",
           }}
         >
-          <Fragment>
-            <Typography variant="h6" sx={{ mb: 1 }}>
-              Reporte de calidad de aire
-            </Typography>
-            <Divider sx={{ mb: 2 }} />
-
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={6}>
-                <MQChart data={mq2} />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <MQChart data={mq4} />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <MQChart data={mq7} />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <MQChart data={mq135} />
-              </Grid>
-            </Grid>
-          </Fragment>
+          <Typography variant="h6" sx={{ mb: 1 }}>
+            Reporte de uso ineficiente de energía eléctrica
+          </Typography>
+          <Divider sx={{ mb: 2 }} />
+          <EnergyWasteChart chartData={chartData} />
         </Box>
       )}
     </Fragment>
