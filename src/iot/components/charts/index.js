@@ -4,3 +4,4 @@ export * from './TemperatureChart';
 export * from './HumidityChart';
 export * from './PressureChart';
 export * from './LuminosityChart';
+export * from './SecurityMovementChart';

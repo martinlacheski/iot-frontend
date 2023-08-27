@@ -5,6 +5,7 @@ import iotApi from "../../api/iotApi";
 import { showSuccessToast, showErrorAlert } from "../../utils";
 import { getDatetimeString } from "../../helpers/getDateTimeString";
 import { Box, Typography, Grid, Divider } from "@mui/material";
+import { SecurityMovementChart } from "../components/charts";
 
 export const SecurityMovement = () => {
   const [environments, setEnvironments] = useState([]);
@@ -12,6 +13,7 @@ export const SecurityMovement = () => {
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [tableData, setTableData] = useState([]);
 
   const fetchEnvironments = async () => {
     try {
@@ -46,8 +48,16 @@ export const SecurityMovement = () => {
       fromDate: getDatetimeString(new Date(fromDate)),
       toDate: getDatetimeString(new Date(toDate)),
     });
+    // const queryParams = new URLSearchParams({
+    //   fromDate: '2023-08-26 17:00:00',
+    //   toDate: '2023-08-26 18:30:00',
+    // });
 
     try {
+      const { data } = await iotApi.get(
+        `/reports/security-movement/resume/?${queryParams}`
+      );
+      setTableData(data);
       setLoading(false);
       showSuccessToast("¡Reporte generado con éxito!");
       if (!data) return;
@@ -100,9 +110,10 @@ export const SecurityMovement = () => {
         >
           <Fragment>
             <Typography variant="h6" sx={{ mb: 1 }}>
-              Reporte de condiciones climáticas
+              Reporte de movimiento de personas y estado de puertas y ventanas
             </Typography>
             <Divider sx={{ mb: 2 }} />
+            <SecurityMovementChart data={tableData} />
           </Fragment>
         </Box>
       )}
