@@ -14,6 +14,8 @@ import {
 } from "@mui/material";
 import { useForm } from "../../../hooks/useForm";
 import { showSuccessToast, showErrorAlert } from "../../../utils";
+import { getEnvVariables } from "../../../helpers";
+const { VITE_BACKEND_URL } = getEnvVariables();
 
 const formData = {
   id: "",
@@ -39,6 +41,8 @@ const formValidations = {
 export const Organization = () => {
   const [cities, setCities] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [currentLogo, setCurrentLogo] = useState(null); //
+  const [file, setFile] = useState(null);
 
   const {
     formState,
@@ -79,6 +83,8 @@ export const Organization = () => {
       webpage: data.organization.webpage,
       logo: data.organization.logo,
     });
+    setCurrentLogo(data.organization.logo);
+    setFile(null);
   };
 
   useEffect(() => {
@@ -90,10 +96,21 @@ export const Organization = () => {
     setFormSubmitted(true);
     if (!isFormValid) return;
     try {
+      let updatedLogo = logo;
+      if (file) {
+        const formData = new FormData();
+        formData.append("logo", file);
+        const { data } = await iotApi.post(`/organization/upload`, formData);
+        updatedLogo = data.fileName;
+      }
+
+      formState.logo = updatedLogo;
+
       const { data } = await iotApi.put(
         `/organization/${formState.id}`,
         formState
       );
+
       showSuccessToast(data.msg);
       getOrganization();
     } catch (error) {
@@ -214,14 +231,54 @@ export const Organization = () => {
               id="logo"
               name="logo"
               type="file"
+              onChange={(e) => setFile(e.target.files[0])}
               fullWidth
               autoComplete="off"
               error={!!logoValid && formSubmitted}
               helperText={!!logoValid && formSubmitted ? logoValid : ""}
             />
           </Grid>
-        </Grid>
 
+          <Grid container item xs={12}>
+            <Grid item xs={12} sm={3} sx={{ mb: "1rem" }}>
+              <Typography sx={{ mb: "1rem", fontWeight: "bold" }}>
+                Logo actual
+              </Typography>
+              {currentLogo != "" ? (
+                <Box>
+                  <img
+                    src={`${VITE_BACKEND_URL}/${currentLogo}`}
+                    alt={currentLogo}
+                    width="250px"
+                  />
+                </Box>
+              ) : (
+                <Typography sx={{ mb: "1rem", fontWeight: "bold" }}>
+                  No hay logo actual
+                </Typography>
+              )}
+            </Grid>
+
+            <Grid item xs={12} sm={3}>
+              <Typography sx={{ mb: "1rem", fontWeight: "bold" }}>
+                Nuevo logo
+              </Typography>
+              {file ? (
+                <Box>
+                  <img
+                    src={URL.createObjectURL(file)}
+                    alt="Nuevo logo"
+                    width="250px"
+                  />
+                </Box>
+              ) : (
+                <Typography sx={{ mb: "1rem" }}>
+                  No se ha agregado un nuevo logo
+                </Typography>
+              )}
+            </Grid>
+          </Grid>
+        </Grid>
         <Box mt={3} textAlign="end">
           <Button
             variant="contained"

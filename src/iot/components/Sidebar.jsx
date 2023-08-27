@@ -1,11 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  Box,
-  Drawer,
-  IconButton,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Box, Drawer, IconButton, Typography, useTheme } from "@mui/material";
 import { ChevronLeft } from "@mui/icons-material";
 import { FlexBetween } from "./";
 import { SidebarItems } from "./SidebarItems";
@@ -27,7 +21,10 @@ export const Sidebar = ({
   }, [isNonMobile]);
 
   return (
-    <Box component="nav" className="animate__animated animate__fadeIn animate__faster">
+    <Box
+      component="nav"
+      className="animate__animated animate__fadeIn animate__faster"
+    >
       {isSidebarOpen && (
         <Drawer
           open={isSidebarOpen}
@@ -48,14 +45,14 @@ export const Sidebar = ({
           <Box width="100%">
             <Box m="1rem">
               <FlexBetween color={theme.palette.secondary.main}>
-                <Box display="flex" alignItems="center" gap="0.5rem">
-                  <Typography
-                    component="h1"
-                    fontSize="1.5rem"
-                    fontWeight="bold"
-                  >
-                    EnviroSense
-                  </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <img src="/appLogo.png" alt="Logo aplicación" width="200px" />
                 </Box>
                 {!isNonMobile && (
                   <IconButton onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
@@ -64,7 +61,7 @@ export const Sidebar = ({
                 )}
               </FlexBetween>
             </Box>
-            <SidebarItems />  
+            <SidebarItems />
           </Box>
         </Drawer>
       )}
