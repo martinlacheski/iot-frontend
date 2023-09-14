@@ -47,6 +47,7 @@ export const ReportsNavBar = ({
                 onChange={(e) => setSelectedEnvironment(e.target.value)}
                 placeholder="Seleccione un ambiente de la lista"
                 sx={{
+                  width: "100%",
                   backgroundColor: "white"
                 }}
               >

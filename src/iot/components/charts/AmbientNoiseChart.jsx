@@ -32,7 +32,7 @@ export const AmbientNoiseChart = ({noiseData}) => {
           },
           title: {
             display: true,
-            text: "Nivel de ruido",
+            text: "Nivel de ruido ambiental",
           },
         },
         scales: {
@@ -41,11 +41,11 @@ export const AmbientNoiseChart = ({noiseData}) => {
             display: true,
             ticks: {
               callback: function (value, index, values) {
-                return value + " dB";
+                return value;
               },
             },
             min: 0,
-            max: 180,
+            max: 1024,
           },
         },
       });
@@ -53,7 +53,7 @@ export const AmbientNoiseChart = ({noiseData}) => {
         labels: labels,
         datasets: [
           {
-            label: "Ruido (dB)",
+            label: "Ruido ambiental",
             data: values,
             fill: false,
             borderColor: "#94a3b8",

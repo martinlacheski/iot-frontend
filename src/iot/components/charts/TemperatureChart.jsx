@@ -32,7 +32,7 @@ export const TemperatureChart = ({tempData}) => {
           },
           title: {
             display: true,
-            text: "Temperatura",
+            text: "Temperatura ambiente",
           },
         },
         scales: {

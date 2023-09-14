@@ -32,7 +32,7 @@ export const HumidityChart = ({humData}) => {
           },
           title: {
             display: true,
-            text: "Humedad",
+            text: "Humedad relativa",
           },
         },
         scales: {

@@ -24,7 +24,7 @@ ChartJS.register(
 );
 
 export const MQChart = ({ data }) => {
-  const { title, labels, mins, maxs } = data;
+  const { title, labels, mins, maxs, limits, maxLimit } = data;
   const [options, setOptions] = useState({
     responsive: true,
     plugins: {
@@ -45,6 +45,8 @@ export const MQChart = ({ data }) => {
             return value + " ppm";
           },
         },
+        min : 0,
+        max : maxLimit,
       },
     },
   });
@@ -63,6 +65,13 @@ export const MQChart = ({ data }) => {
         data: maxs,
         fill: "-1",
         borderColor: "#475569",
+        tension: 0.1,
+      },
+      {
+        label: "Valor Crítico",
+        data: limits,
+        //fill: "-1",
+        borderColor: "#ff0000",
         tension: 0.1,
       },
     ],

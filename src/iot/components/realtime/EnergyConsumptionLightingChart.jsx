@@ -106,8 +106,8 @@ export const EnergyConsumptionLightingChart = () => {
           ],
         };
       });
-      setCurrent(data.sensor.c);
-      setPowerFactor(data.sensor.pf);
+      setCurrent(Math.round(data.sensor.c * 100) / 100);
+      setPowerFactor(Math.round(data.sensor.pf * 100) / 100);
       setVoltage(Math.round(data.sensor.v * 100) / 100);
     });
 

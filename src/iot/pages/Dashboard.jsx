@@ -56,16 +56,16 @@ export const Dashboard = () => {
               }}
             >
               <Grid item xs={12} md={3}>
-                <AirQualityChart />
+                <FlammableGasChart />
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <NaturalGasChart />
               </Grid>
               <Grid item xs={12} md={3}>
                 <MonoxideCarbonGasChart />
               </Grid>
               <Grid item xs={12} md={3}>
-                <FlammableGasChart />
-              </Grid>
-              <Grid item xs={12} md={3}>
-                <NaturalGasChart />
+                <AirQualityChart />
               </Grid>
             </Grid>
           </Grid>

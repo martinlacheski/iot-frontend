@@ -38,9 +38,9 @@ export const AirQualityChart = () => {
         maxValue={max}
         arc={{
           subArcs: [
-            { limit: max * 0.33, color: "#b91c1c" },
-            { limit: max * 0.66, color: "#f59e0b" },
-            { color: "#006600" },
+            { limit: max * 0.35, color: "#006600" },
+            { limit: max * 0.70, color: "#f59e0b" },
+            { color: "#b91c1c" },
           ],
         }}
         value={data}

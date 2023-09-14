@@ -39,8 +39,8 @@ export const FlammableGasChart = () => {
         maxValue={max}
         arc={{
           subArcs: [
-            { limit: max * 0.33, color: "#006600" },
-            { limit: max * 0.66, color: "#f59e0b" },
+            { limit: max * 0.25, color: "#006600" },
+            { limit: max * 0.50, color: "#f59e0b" },
             { color: "#b91c1c" },
           ],
         }}
