@@ -155,19 +155,25 @@ export const EnergyConsumptionDevicesChart = () => {
             }}
           >
             <Box>
-              <Typography variant="p">Voltaje: </Typography>
+              <Typography variant="p" title="Voltaje">
+                Voltaje:{" "}
+              </Typography>
               <Typography variant="p" fontWeight="bold">
                 {voltage} V
               </Typography>
             </Box>
             <Box>
-              <Typography variant="p">Corriente: </Typography>
+              <Typography variant="p" title="Corriente">
+                Corriente:{" "}
+              </Typography>
               <Typography variant="p" fontWeight="bold">
                 {current} A
               </Typography>
             </Box>
             <Box>
-              <Typography variant="p">Factor de potencia: </Typography>
+              <Typography variant="p" title="Factor de potencia">
+                FP:{" "}
+              </Typography>
               <Typography variant="p" fontWeight="bold">
                 {powerFactor}
               </Typography>

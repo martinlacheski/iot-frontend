@@ -37,7 +37,7 @@ import {
   PictureAsPdfOutlined,
 } from "@mui/icons-material";
 import { showSuccessToast, showErrorAlert } from "../../../utils";
-import { getDatetimeString } from "../../../helpers/getDateTimeString";
+import { getDatetimeString } from "../../../helpers/getDatetimeString";
 
 ChartJS.register(
   CategoryScale,

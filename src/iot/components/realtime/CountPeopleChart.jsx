@@ -18,16 +18,12 @@ export const CountPeopleChart = () => {
         console.log(error);
       }
     };
-
     getLastValue();
-
     const socket = io(VITE_SOCKET_URL);
-
     socket.on("countPeople", (data) => {
       if (!data.data.timestamp) return;
       setData(data.sensor.count);
     });
-
     return () => {
       socket.disconnect();
     };

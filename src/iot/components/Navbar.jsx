@@ -51,21 +51,6 @@ export const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
           <IconButton onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
             <MenuIcon />
           </IconButton>
-          {/* <FlexBetween
-            // backgroundColor={theme.palette.light.alt}
-            border={`1px solid ${theme.palette.light.main}`}
-            borderRadius="9px"
-            gap="3px"
-            padding="0rem 1.5rem"
-          >
-            <InputBase
-              placeholder="Ingrese su búsqueda aquí..."
-              sx={{ width: "20rem" }}
-            />
-            <IconButton>
-              <Search />
-            </IconButton>
-          </FlexBetween> */}
         </FlexBetween>
 
         {/* RIGHT SIDE */}
@@ -87,7 +72,7 @@ export const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
                   fontSize="0.85rem"
                   sx={{ color: theme.palette.secondary }}
                 >
-                  {user?.name || "User"}
+                  {user?.name || "User"} {user?.role ? `(${user.role})` : ""}
                 </Typography>
               </Box>
               <ArrowDropDownOutlined

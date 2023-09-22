@@ -40,5 +40,27 @@ const showConfirmationAlert = (text) => {
   });
 };
 
+const showLoadingAlert = (title, text, time) => {
+  let timerInterval;
+  Swal.fire({
+    title: title,
+    text: text,
+    timer: time,
+    timerProgressBar: true,
+    didOpen: () => {
+      Swal.showLoading();
+      timerInterval = setInterval(() => { }, 100);
+    },
+    willClose: () => {
+      clearInterval(timerInterval);
+    }
+  }).then((result) => {
+    if (result.dismiss === Swal.DismissReason.timer) {
+      console.log("I was closed by the timer");
+    }
+    clearInterval(timerInterval);
+  });
+};
+
 //   Exportamos
-export { showSuccessToast, showErrorAlert, showConfirmationAlert };
+export { showSuccessToast, showErrorAlert, showConfirmationAlert, showLoadingAlert };

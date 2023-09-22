@@ -3,7 +3,7 @@ import { Header } from "../../components/Header";
 import { Box, Typography, Grid, Divider } from "@mui/material";
 import iotApi from "../../../api/iotApi";
 import { showSuccessToast, showErrorAlert } from "../../../utils";
-import { getDatetimeString } from "../../../helpers/getDateTimeString";
+import { getDatetimeString } from "../../../helpers/getDatetimeString";
 import { ReportsNavBar } from "../../components/ReportsNavBar";
 import { MQChart } from "../../components/charts";
 
