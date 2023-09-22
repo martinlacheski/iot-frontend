@@ -3,7 +3,7 @@ import { iotApi } from "../api";
 import { onChecking, onLogin, onLogout, clearErrorMessage } from "../store";
 
 export const useAuthStore = () => {
-  const { status, user, errorMessage } = useSelector((state) => state.auth);
+  const { status, user, role, errorMessage } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const startLogin = async ({ email, password }) => {
@@ -12,7 +12,7 @@ export const useAuthStore = () => {
       const { data } = await iotApi.post("/auth/login", { email, password });
       localStorage.setItem("token", data.token);
       localStorage.setItem("token-init-date", new Date().getTime());
-      dispatch(onLogin({ name: data.name, uid: data.uid }));
+      dispatch(onLogin({ name: data.name, uid: data.uid, role: data.role }));
     } catch (error) {
       if (error.response.data?.msg) {
         dispatch(onLogout(error.response.data?.msg));
@@ -35,7 +35,7 @@ export const useAuthStore = () => {
       });
       localStorage.setItem("token", data.token);
       localStorage.setItem("token-init-date", new Date().getTime());
-      dispatch(onLogin({ name: data.name, uid: data.uid }));
+      dispatch(onLogin({ name: data.name, uid: data.uid, role: data.role }));
     } catch (error) {
       if (error.response.data?.msg) {
         dispatch(onLogout(error.response.data?.msg));
@@ -56,7 +56,7 @@ export const useAuthStore = () => {
       const { data } = await iotApi.get("/auth/renew");
       localStorage.setItem("token", data.token);
       localStorage.setItem("token-init-date", new Date().getTime());
-      dispatch(onLogin({ name: data.name, uid: data.uid }));
+      dispatch(onLogin({ name: data.name, uid: data.uid, role: data.role }));
     } catch (error) {
       localStorage.clear();
       dispatch(onLogout());
@@ -72,6 +72,7 @@ export const useAuthStore = () => {
     // Propiedades
     status,
     user,
+    role,
     errorMessage,
 
     // Métodos

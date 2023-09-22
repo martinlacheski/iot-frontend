@@ -55,7 +55,7 @@ export const LoginPage = () => {
   }, [errorMessage]);
 
   return (
-    <AuthLayout title="Iniciar sesión">
+    <AuthLayout title="Iniciar sesión en EnviroSense">
       <form
         onSubmit={onSubmit}
         className="animate__animated animate__fadeIn animate__faster"
@@ -108,7 +108,7 @@ export const LoginPage = () => {
           </Grid>
 
           <Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>
-            <Grid item xs={12}  display={!!localErrorMessage ? "" : "none"}>
+            <Grid item xs={12} display={!!localErrorMessage ? "" : "none"}>
               <Alert severity="error">
                 <Typography variant="body2">{localErrorMessage}</Typography>
               </Alert>
@@ -123,13 +123,6 @@ export const LoginPage = () => {
                 Ingresar
               </Button>
             </Grid>
-          </Grid>
-
-          <Grid container direction="row" justifyContent="end">
-            <Typography sx={{ mr: 1 }}>¿No tienes una cuenta?</Typography>
-            <Link component={RouterLink} color="inherit" to="/auth/register">
-              Regístrate
-            </Link>
           </Grid>
         </Grid>
       </form>

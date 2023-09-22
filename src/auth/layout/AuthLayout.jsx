@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@mui/material";
+import { Grid, Typography, Box } from "@mui/material";
 
 export const AuthLayout = ({ children, title = "" }) => {
   return (
@@ -8,8 +8,22 @@ export const AuthLayout = ({ children, title = "" }) => {
       direction={"column"}
       alignItems={"center"}
       justifyContent={"center"}
-      sx={{ minHeight: "100vh", backgroundColor: "background.main", padding: 4 }}
+      sx={{
+        minHeight: "100vh",
+        backgroundColor: "background.main",
+      }}
     >
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          mb: 4,
+        }}
+      >
+        <img src="/appLogo.png" alt="Logo aplicación" width="250px" />
+      </Box>
+
       <Grid
         item
         className="box-shadow"
