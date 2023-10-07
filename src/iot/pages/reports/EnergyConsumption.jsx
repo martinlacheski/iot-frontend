@@ -192,6 +192,8 @@ export const EnergyConsumption = () => {
       showSuccessToast("¡Reporte generado con éxito!");
       if (!data) return;
 
+      console.log(data);
+
       // ACTUALIZAR LOS DATOS DE LOS GRÁFICOS
       setLabels(data.labels);
       const voltageChart = {

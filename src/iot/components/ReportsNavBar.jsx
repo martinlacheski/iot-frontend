@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Typography,
@@ -28,7 +28,9 @@ export const ReportsNavBar = ({
   handleChangeToDate,
   handleSubmit,
   handleReset,
+  handleExportPDF,
 }) => {
+
   return (
     <Box
       sx={{
@@ -38,7 +40,7 @@ export const ReportsNavBar = ({
     >
       <FlexBetween>
         <Grid container spacing={1} sx={{ width: "100%" }}>
-          <Grid item xs={12} md={5}>
+          <Grid item xs={12} lg={5}>
             <FormControl fullWidth>
               <InputLabel>Seleccione un ambiente de la lista</InputLabel>
               <Select
@@ -48,20 +50,20 @@ export const ReportsNavBar = ({
                 placeholder="Seleccione un ambiente de la lista"
                 sx={{
                   width: "100%",
-                  backgroundColor: "white"
+                  backgroundColor: "white",
                 }}
               >
                 {environments.map((environment) => (
-                  <MenuItem key={environment._id} value={environment._id}>
+                  <MenuItem key={environment._id} value={environment}>
                     {environment.name}
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={6} md={2}>
+          <Grid item xs={6} lg={2}>
             <DateTimePicker
-              format="DD/MM/YYYY HH:mm:ss"
+              format="DD/MM/YYYY HH:mm"
               ampm={false}
               value={fromDate}
               onChange={handleChangeFromDate}
@@ -69,15 +71,12 @@ export const ReportsNavBar = ({
               sx={{
                 width: "100%",
                 backgroundColor: "white",
-                // "& .MuiInputBase-input": {
-                //   height: "1rem",
-                // },
               }}
             />
           </Grid>
-          <Grid item xs={6} md={2}>
+          <Grid item xs={6} lg={2}>
             <DateTimePicker
-              format="DD/MM/YYYY HH:mm:ss"
+              format="DD/MM/YYYY HH:mm"
               ampm={false}
               value={toDate}
               onChange={handleChangeToDate}
@@ -85,13 +84,10 @@ export const ReportsNavBar = ({
               sx={{
                 width: "100%",
                 backgroundColor: "white",
-                // "& .MuiInputBase-input": {
-                //   height: "1rem",
-                // },
               }}
             />
           </Grid>
-          <Grid item xs={4} md={1}>
+          <Grid item xs={4} lg={1}>
             <Button
               title="Generar reporte"
               variant="contained"
@@ -103,7 +99,7 @@ export const ReportsNavBar = ({
               Generar
             </Button>
           </Grid>
-          <Grid item xs={4} md={1}>
+          <Grid item xs={4} lg={1}>
             <Button
               title="Limpiar campos"
               variant="contained"
@@ -116,10 +112,11 @@ export const ReportsNavBar = ({
               Limpiar
             </Button>
           </Grid>
-          <Grid item xs={4} md={1}>
+          <Grid item xs={4} lg={1}>
             <Button
               title="Exportar reporte"
               variant="contained"
+              onClick={handleExportPDF}
               color="error"
               sx={{ height: "100%", width: "100%", gap: 0.5 }}
               size="small"

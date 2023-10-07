@@ -21,6 +21,7 @@ export const SecurityMovement = () => {
       setEnvironments(data.environments);
     } catch (error) {
       console.log(error);
+      showErrorAlert("¡Ocurrió un error al cargar los ambientes!");
     }
   };
 
@@ -30,6 +31,7 @@ export const SecurityMovement = () => {
 
   // SUBMIT
   const handleSubmit = async () => {
+
     setLoading(true);
 
     // VALIDACIONES BÁSICAS
@@ -48,10 +50,6 @@ export const SecurityMovement = () => {
       fromDate: getDatetimeString(new Date(fromDate)),
       toDate: getDatetimeString(new Date(toDate)),
     });
-    // const queryParams = new URLSearchParams({
-    //   fromDate: '2023-08-26 17:00:00',
-    //   toDate: '2023-08-26 18:30:00',
-    // });
 
     try {
       const { data } = await iotApi.get(
