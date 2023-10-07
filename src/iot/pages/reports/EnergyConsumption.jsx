@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState, useRef } from "react";
 import { Header } from "../../components/Header";
 import { ReportsNavBar } from "../../components/ReportsNavBar";
+import { useSelector } from "react-redux";
 
 // Graficos
 import {
@@ -133,6 +134,8 @@ const pfChartOptions = {
 };
 
 export const EnergyConsumption = () => {
+  const { user } = useSelector((state) => state.auth);
+
   const [environments, setEnvironments] = useState([]);
   const [selectedEnvironment, setSelectedEnvironment] = useState("");
   const [fromDate, setFromDate] = useState(null);
@@ -423,6 +426,7 @@ export const EnergyConsumption = () => {
     console.log("potenciaCanvas", potenciaCanvas);
 
     const pdf = energyConsumptionPDF(
+      user,
       organization,
       selectedEnvironment,
       fromDate,

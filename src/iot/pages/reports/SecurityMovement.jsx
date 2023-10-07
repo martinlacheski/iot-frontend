@@ -7,8 +7,10 @@ import { getDatetimeString } from "../../../helpers/getDatetimeString";
 import { Box, Typography, Grid, Divider } from "@mui/material";
 import { SecurityMovementChart } from "../../components/charts";
 import { securityMovementPDF } from "./pdf/securityMovementPDF";
+import { useSelector } from "react-redux";
 
 export const SecurityMovement = () => {
+  const { user } = useSelector((state) => state.auth);
   const [environments, setEnvironments] = useState([]);
   const [selectedEnvironment, setSelectedEnvironment] = useState("");
   const [fromDate, setFromDate] = useState(null);
@@ -94,9 +96,9 @@ export const SecurityMovement = () => {
   };
 
   const handleExportPDF = () => {
-    console.log('make pdf');
     if (!tableData) return;
     const pdf = securityMovementPDF(
+      user,
       organization,
       selectedEnvironment,
       fromDate,

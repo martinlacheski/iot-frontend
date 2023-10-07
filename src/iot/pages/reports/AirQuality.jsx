@@ -6,10 +6,11 @@ import { showSuccessToast, showErrorAlert } from "../../../utils";
 import { getDatetimeString } from "../../../helpers/getDatetimeString";
 import { ReportsNavBar } from "../../components/ReportsNavBar";
 import { MQChart } from "../../components/charts";
-import jsPDF from "jspdf";
 import { airQualityPDF } from "./pdf/airQualityPDF";
+import { useSelector } from "react-redux";
 
 export const AirQuality = () => {
+  const { user } = useSelector((state) => state.auth);
   const [environments, setEnvironments] = useState([]);
   const [selectedEnvironment, setSelectedEnvironment] = useState("");
   const [fromDate, setFromDate] = useState(null);
@@ -120,6 +121,7 @@ export const AirQuality = () => {
     }
 
     const pdf = airQualityPDF(
+      user,
       organization,
       selectedEnvironment,
       fromDate,

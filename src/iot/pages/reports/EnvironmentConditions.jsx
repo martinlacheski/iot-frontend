@@ -13,8 +13,11 @@ import {
 import { Box, Typography, Grid, Divider } from "@mui/material";
 import { AmbientNoiseChart } from "../../components/charts/AmbientNoiseChart";
 import { environmentConditionsPDF } from "./pdf/environmentConditionsPDF";
+import { useSelector } from "react-redux";
 
 export const EnvironmentConditions = () => {
+  const { user } = useSelector((state) => state.auth);
+
   const [environments, setEnvironments] = useState([]);
   const [selectedEnvironment, setSelectedEnvironment] = useState("");
   const [fromDate, setFromDate] = useState(null);
@@ -178,6 +181,7 @@ export const EnvironmentConditions = () => {
     }
 
     const pdf = environmentConditionsPDF(
+      user,
       organization,
       selectedEnvironment,
       fromDate,

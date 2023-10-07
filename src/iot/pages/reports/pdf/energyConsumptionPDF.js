@@ -1,8 +1,9 @@
 import jsPDF from "jspdf";
-import { getEnvVariables, getDatetimeString } from "../../../../helpers";
+import { getEnvVariables, getDatetimeString, getLocaleDatetimeString } from "../../../../helpers";
 const { VITE_BACKEND_URL } = getEnvVariables();
 
 export const energyConsumptionPDF = (
+    user,
     organization,
     selectedEnvironment,
     fromDate,
@@ -15,7 +16,6 @@ export const energyConsumptionPDF = (
 ) => {
     const pdf = new jsPDF("p", "px", "a4", "false");
 
-    console.log('potenciaCanvas2', potenciaCanvas);
     // Encabezado
     pdf.setFontSize(10);
     pdf.setFont("helvetica", "bold");
@@ -66,11 +66,11 @@ export const energyConsumptionPDF = (
         align: "left",
     });
 
-    pdf.text(`Desde: ${getDatetimeString(new Date(fromDate))}`, 20, 85, {
+    pdf.text(`Desde: ${getLocaleDatetimeString(new Date(fromDate))}`, 20, 85, {
         align: "left",
     });
 
-    pdf.text(`Hasta: ${getDatetimeString(new Date(toDate))}`, 20, 95, {
+    pdf.text(`Hasta: ${getLocaleDatetimeString(new Date(toDate))}`, 20, 95, {
         align: "left",
     });
 
@@ -116,9 +116,9 @@ export const energyConsumptionPDF = (
     pdf.setFont("helvetica", "normal");
     pdf.setFontSize(8);
     pdf.text(
-        `Reporte generado el ${getDatetimeString(
+        `Reporte generado el ${getLocaleDatetimeString(
             new Date()
-        )}   -   Página ${pdf.internal.getNumberOfPages()}`,
+        )} por ${user?.name} - Página ${pdf.internal.getNumberOfPages()} de 2`,
         pdf.internal.pageSize.width - 20,
         pdf.internal.pageSize.height - 10,
         { align: "right" }
@@ -176,7 +176,7 @@ export const energyConsumptionPDF = (
     pdf.text(
         `Reporte generado el ${getDatetimeString(
             new Date()
-        )}   -   Página ${pdf.internal.getNumberOfPages()}`,
+        )} por ${user?.name} - Página ${pdf.internal.getNumberOfPages()} de 2 `,
         pdf.internal.pageSize.width - 20,
         pdf.internal.pageSize.height - 10,
         { align: "right" }
