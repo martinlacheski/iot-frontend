@@ -231,6 +231,7 @@ export const Environments = () => {
             variant="contained"
             color="primary"
             onClick={() => navigate("/parameters/environments/create")}
+            disabled
           >
             Crear ambiente
           </Button>

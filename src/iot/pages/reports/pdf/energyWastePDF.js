@@ -1,8 +1,9 @@
 import jsPDF from "jspdf";
-import { getEnvVariables, getDatetimeString } from "../../../../helpers";
+import { getEnvVariables, getDatetimeString, getLocaleDatetimeString } from "../../../../helpers";
 const { VITE_BACKEND_URL } = getEnvVariables();
 
 export const energyWastePDF = (
+    user,
     organization,
     selectedEnvironment,
     fromDate,
@@ -62,11 +63,11 @@ export const energyWastePDF = (
         align: "left",
     });
 
-    pdf.text(`Desde: ${getDatetimeString(new Date(fromDate))}`, 20, 85, {
+    pdf.text(`Desde: ${getLocaleDatetimeString(fromDate)}`, 20, 85, {
         align: "left",
     });
 
-    pdf.text(`Hasta: ${getDatetimeString(new Date(toDate))}`, 20, 95, {
+    pdf.text(`Hasta: ${getLocaleDatetimeString(toDate)}`, 20, 95, {
         align: "left",
     });
 
@@ -77,13 +78,13 @@ export const energyWastePDF = (
     const energyWasteImgHeigth = (energyWasteCanvas.height * pdfWidth) / energyWasteCanvas.width;
     pdf.addImage(energyWasteImg, "PNG", 20, 100, pdfWidth - 40, energyWasteImgHeigth);
 
-     // Footer con número de página, fecha y hora
+    // Footer con número de página, fecha y hora
     pdf.setFont("helvetica", "normal");
     pdf.setFontSize(8);
     pdf.text(
-        `Reporte generado el ${getDatetimeString(
-            new Date()
-        )}   -   Página ${pdf.internal.getNumberOfPages()}`,
+        `Reporte generado el ${
+            getLocaleDatetimeString(new Date())
+        } por ${user?.name} - Página ${pdf.internal.getNumberOfPages()} de ${pdf.internal.getNumberOfPages()}`,
         pdf.internal.pageSize.width - 20,
         pdf.internal.pageSize.height - 10,
         { align: "right" }

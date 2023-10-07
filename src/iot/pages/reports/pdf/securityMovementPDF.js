@@ -1,9 +1,10 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { getEnvVariables, getDatetimeString } from "../../../../helpers";
+import { getEnvVariables, getLocaleDatetimeString } from "../../../../helpers";
 const { VITE_BACKEND_URL } = getEnvVariables();
 
 export const securityMovementPDF = (
+    user,
     organization,
     selectedEnvironment,
     fromDate,
@@ -63,15 +64,15 @@ export const securityMovementPDF = (
         align: "left",
     });
 
-    pdf.text(`Desde: ${getDatetimeString(new Date(fromDate))}`, 20, 85, {
+    pdf.text(`Desde: ${getLocaleDatetimeString(new Date(fromDate))}`, 20, 85, {
         align: "left",
     });
 
-    pdf.text(`Hasta: ${getDatetimeString(new Date(toDate))}`, 20, 95, {
+    pdf.text(`Hasta: ${getLocaleDatetimeString(new Date(toDate))}`, 20, 95, {
         align: "left",
     });
 
-    const columns = ["DESDE", "HASTA", "DETECTADO", "MOVIMIENTOS", "INICIAL", "FINAL", "MÍNIMO", "MÁXIMO", "PUERTAS", "VENTANAS"];
+    const columns = ["DESDE", "HASTA", "DETECTADO", "CANTIDAD", "INICIAL", "FINAL", "MÍNIMO", "MÁXIMO", "PUERTAS", "VENTANAS"];
 
     const data = Object.values(tableData.data);
     console.log(data);
@@ -89,12 +90,26 @@ export const securityMovementPDF = (
             row.doorsStatus.wereOpen ? "Abiertas" : "Cerradas",
         ];
     });
-    // Fill two rows with empty data
 
-
-    console.log(tableData);
+    const columns2 = [
+        "               PERÍODO            ",
+        "           MOVIMIENTOS",
+        "           FLUJO DE PERSONAS",
+        "       ABERTURAS"
+    ];
     pdf.autoTable({
         startY: 110,
+        head: [columns2],
+        // body: emptyRows,
+        headStyles: {
+            fillColor: [41, 128, 186],
+            fontSize: 7,
+            halign: "center",
+            valign: "middle",
+        },
+    });
+    pdf.autoTable({
+        startY: 120,
         head: [columns],
         body: rows,
         theme: "grid",
@@ -107,6 +122,20 @@ export const securityMovementPDF = (
         },
         styles: { fontSize: 7 },
     });
+
+    // FUNCION PARA AGREGAR NUMEROS DE PAGINA EN TODAS LAS HOJAS
+    const pageCount = pdf.internal.getNumberOfPages();
+
+    for (var i = 1; i <= pageCount; i++) {
+        pdf.setPage(i);
+        pdf.setFontSize(8);
+        pdf.text(
+            `Reporte generado el ${getLocaleDatetimeString(new Date())
+            } por ${user?.name} - Página ${i} de ${pageCount}`,
+            pdf.internal.pageSize.width / 2,
+            pdf.internal.pageSize.height - 10,
+        );
+    }
 
     return pdf;
 }

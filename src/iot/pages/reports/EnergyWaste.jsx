@@ -10,8 +10,10 @@ import jsPDF from "jspdf";
 import { getEnvVariables } from "../../../helpers";
 const { VITE_BACKEND_URL } = getEnvVariables();
 import { energyWastePDF } from "./pdf/energyWastePDF";
+import { useSelector } from "react-redux";
 
 export const EnergyWaste = () => {
+  const { user } = useSelector((state) => state.auth);
   const [environments, setEnvironments] = useState([]);
   const [organization, setOrganization] = useState({});
   const [selectedEnvironment, setSelectedEnvironment] = useState("");
@@ -117,6 +119,7 @@ export const EnergyWaste = () => {
     }
 
     const pdf = energyWastePDF(
+      user,
       organization,
       selectedEnvironment,
       fromDate,
