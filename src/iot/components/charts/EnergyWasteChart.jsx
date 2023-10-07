@@ -4,7 +4,7 @@ import jsPDF from "jspdf";
 import { getEnvVariables } from "../../../helpers";
 const { VITE_BACKEND_URL } = getEnvVariables();
 
-export const EnergyWasteChart = ({ organization, chartData, setEnergyWasteCanvas }) => {
+export const EnergyWasteChart = ({ chartData, setEnergyWasteCanvas }) => {
   const energyWasteChartRef = useRef(null);
 
   useEffect(() => {

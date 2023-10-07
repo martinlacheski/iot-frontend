@@ -9,6 +9,7 @@ import { Box, Typography, Grid, Divider } from "@mui/material";
 import jsPDF from "jspdf";
 import { getEnvVariables } from "../../../helpers";
 const { VITE_BACKEND_URL } = getEnvVariables();
+import { energyWastePDF } from "./pdf/energyWastePDF";
 
 export const EnergyWaste = () => {
   const [environments, setEnvironments] = useState([]);
@@ -115,83 +116,12 @@ export const EnergyWaste = () => {
       return;
     }
 
-    const canvas = energyWasteCanvas;
-    const pngUrl = canvas.toDataURL("image/png");
-    const pdf = new jsPDF("p", "px", "a4", "false");
-
-    // Encabezado
-    pdf.setFontSize(10);
-    pdf.setFont("helvetica", "bold");
-    pdf.text(`${organization.name}`, pdf.internal.pageSize.width / 2, 20, {
-      align: "center",
-    });
-
-    pdf.setFont("helvetica", "normal");
-    pdf.setFontSize(8);
-    pdf.text(
-      `${organization.address} - ${organization.city.name}`,
-      pdf.internal.pageSize.width / 2,
-      30,
-      { align: "center" }
-    );
-
-    pdf.setFont("helvetica", "italic");
-    pdf.setFontSize(8);
-    pdf.text(
-      `Teléfono: ${organization.phone} - ${organization.email} - ${organization.webpage}`,
-      pdf.internal.pageSize.width / 2,
-      38,
-      { align: "center" }
-    );
-
-    const logo = new Image();
-    logo.src = `${VITE_BACKEND_URL}/${organization.logo}`;
-    pdf.addImage(logo, "PNG", 20, 10, 40, 30);
-
-    // hr
-    pdf.setLineWidth(0.5);
-    pdf.setDrawColor(0, 0, 0);
-    pdf.line(20, 45, pdf.internal.pageSize.width - 20, 45);
-
-    // Título
-    pdf.setFont("helvetica", "bold");
-    pdf.setFontSize(12);
-    pdf.text(
-      "Reporte de uso ineficiente de energía eléctrica",
-      pdf.internal.pageSize.width / 2,
-      60,
-      { align: "center" }
-    );
-
-    pdf.setFont("helvetica", "normal");
-    pdf.setFontSize(8);
-    pdf.text(`Ambiente: ${selectedEnvironment.name}`, 20, 75, {
-      align: "left",
-    });
-
-    pdf.text(`Desde: ${getDatetimeString(new Date(fromDate))}`, 20, 85, {
-      align: "left",
-    });
-
-    pdf.text(`Hasta: ${getDatetimeString(new Date(toDate))}`, 20, 95, {
-      align: "left",
-    });
-
-    // Adjust the size of the chart to the PDF width
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-    pdf.addImage(pngUrl, "PNG", 20, 105, pdfWidth - 40, pdfHeight);
-
-    // Footer con número de página, fecha y hora
-    pdf.setFont("helvetica", "normal");
-    pdf.setFontSize(8);
-    pdf.text(
-      `Reporte generado el ${getDatetimeString(
-        new Date()
-      )}   -   Página ${pdf.internal.getNumberOfPages()}`,
-      pdf.internal.pageSize.width - 20,
-      pdf.internal.pageSize.height - 10,
-      { align: "right" }
+    const pdf = energyWastePDF(
+      organization,
+      selectedEnvironment,
+      fromDate,
+      toDate,
+      energyWasteCanvas
     );
 
     pdf.save("Reporte de uso ineficiente de energía eléctrica.pdf");
@@ -231,7 +161,6 @@ export const EnergyWaste = () => {
             <Divider sx={{ mb: 2 }} />
             <EnergyWasteChart
               chartData={chartData}
-              organization={organization}
               setEnergyWasteCanvas={setEnergyWasteCanvas}
             />
           </Box>
