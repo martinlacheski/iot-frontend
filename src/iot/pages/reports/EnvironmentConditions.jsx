@@ -12,6 +12,7 @@ import {
 } from "../../components/charts";
 import { Box, Typography, Grid, Divider } from "@mui/material";
 import { AmbientNoiseChart } from "../../components/charts/AmbientNoiseChart";
+import { environmentConditionsPDF } from "./pdf/environmentConditionsPDF";
 
 export const EnvironmentConditions = () => {
   const [environments, setEnvironments] = useState([]);
@@ -19,6 +20,7 @@ export const EnvironmentConditions = () => {
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isData, setIsData] = useState(false);
 
   const [tempData, setTempData] = useState({});
   const [humData, setHumData] = useState({});
@@ -26,6 +28,14 @@ export const EnvironmentConditions = () => {
   const [noiseData, setNoiseData] = useState({});
   const [internalLumData, setInternalLumData] = useState({});
   const [externalLumData, setExternalLumData] = useState({});
+
+  const [organization, setOrganization] = useState({});
+  const [temperaturaCanvas, setTemperaturaCanvas] = useState(null);
+  const [humedadCanvas, setHumedadCanvas] = useState(null);
+  const [presionCanvas, setPresionCanvas] = useState(null);
+  const [ruidoCanvas, setRuidoCanvas] = useState(null);
+  const [iluminacionIntCanvas, setIluminacionIntCanvas] = useState(null);
+  const [iluminacionExtCanvas, setIluminacionExtCanvas] = useState(null);
 
   const fetchEnvironments = async () => {
     try {
@@ -36,8 +46,18 @@ export const EnvironmentConditions = () => {
     }
   };
 
+  const fetchOrganization = async () => {
+    try {
+      const { data } = await iotApi.get("/organization");
+      setOrganization(data.organization);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchEnvironments();
+    fetchOrganization();
   }, []);
 
   // SUBMIT
@@ -62,11 +82,10 @@ export const EnvironmentConditions = () => {
     });
 
     try {
-
+      setIsData(false);
       const { data } = await iotApi.get(
         `/reports/environment-conditions/resume/?${queryParams}`
       );
-      console.log(data);
       setTempData(
         {
           labels: data.tempAndHumidityData.labels,
@@ -87,7 +106,7 @@ export const EnvironmentConditions = () => {
           minPres: data.pressureAndTempData.minPres,
           maxPres: data.pressureAndTempData.maxPres,
         } || {}
-      );  
+      );
       setNoiseData(
         {
           labels: data.ambientNoiseData.labels,
@@ -110,7 +129,7 @@ export const EnvironmentConditions = () => {
           maxs: data.externalLuminosityData.maxLevel,
         } || {}
       );
-
+      setIsData(true);
       setLoading(false);
       showSuccessToast("¡Reporte generado con éxito!");
       if (!data) return;
@@ -136,6 +155,42 @@ export const EnvironmentConditions = () => {
     setTempData({});
     setHumData({});
     setPresData({});
+    setNoiseData({});
+    setInternalLumData({});
+    setExternalLumData({});
+    setIsData(false);
+  };
+
+  const handleExportPDF = () => {
+    if (!isData) {
+      showErrorAlert("¡No hay datos para exportar!");
+      return;
+    } else if (
+      !temperaturaCanvas ||
+      !humedadCanvas ||
+      !presionCanvas ||
+      !ruidoCanvas ||
+      !iluminacionIntCanvas ||
+      !iluminacionExtCanvas
+    ) {
+      showErrorAlert("¡No hay datos para exportar!");
+      return;
+    }
+
+    const pdf = environmentConditionsPDF(
+      organization,
+      selectedEnvironment,
+      fromDate,
+      toDate,
+      temperaturaCanvas,
+      humedadCanvas,
+      presionCanvas,
+      ruidoCanvas,
+      iluminacionIntCanvas,
+      iluminacionExtCanvas
+    );
+
+    pdf.save("Reporte de condiciones del ambiente.pdf");
   };
 
   return (
@@ -155,6 +210,7 @@ export const EnvironmentConditions = () => {
         handleChangeToDate={handleChangeToDate}
         handleSubmit={handleSubmit}
         handleReset={handleReset}
+        handleExportPDF={handleExportPDF}
       />
 
       {!loading && (
@@ -171,23 +227,41 @@ export const EnvironmentConditions = () => {
             <Divider sx={{ mb: 2 }} />
 
             <Grid container spacing={2}>
-              <Grid item xs={12} md={6}>
-                <TemperatureChart tempData={tempData} />
+              <Grid item xs={12}>
+                <TemperatureChart
+                  tempData={tempData}
+                  setTemperaturaCanvas={setTemperaturaCanvas}
+                />
               </Grid>
-              <Grid item xs={12} md={6}>
-                <HumidityChart humData={humData} />
+              <Grid item xs={12}>
+                <HumidityChart
+                  humData={humData}
+                  setHumedadCanvas={setHumedadCanvas}
+                />
               </Grid>
-              <Grid item xs={12} md={6}>
-                <PressureChart presData={presData} />
+              <Grid item xs={12}>
+                <PressureChart
+                  presData={presData}
+                  setPresionCanvas={setPresionCanvas}
+                />
               </Grid>
-              <Grid item xs={12} md={6}>
-                <AmbientNoiseChart noiseData={noiseData} />
+              <Grid item xs={12}>
+                <AmbientNoiseChart
+                  noiseData={noiseData}
+                  setRuidoCanvas={setRuidoCanvas}
+                />
               </Grid>
-              <Grid item xs={12} md={6}>
-                <LuminosityChart data={internalLumData} />
+              <Grid item xs={12}>
+                <LuminosityChart
+                  data={internalLumData}
+                  setIluminacionCanvas={setIluminacionIntCanvas}
+                />
               </Grid>
-              <Grid item xs={12} md={6}>
-                <LuminosityChart data={externalLumData} />
+              <Grid item xs={12}>
+                <LuminosityChart
+                  data={externalLumData}
+                  setIluminacionCanvas={setIluminacionExtCanvas}
+                />
               </Grid>
             </Grid>
           </Fragment>

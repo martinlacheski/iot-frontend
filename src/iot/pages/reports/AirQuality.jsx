@@ -72,7 +72,7 @@ export const AirQuality = () => {
     });
 
     try {
-      setIsData(true);
+      setIsData(false);
       const { data } = await iotApi.get(
         `/reports/gases/resume/?${queryParams}`
       );

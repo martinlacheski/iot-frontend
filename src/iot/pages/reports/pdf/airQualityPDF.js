@@ -73,18 +73,6 @@ export const airQualityPDF = (
         align: "left",
     });
 
-    // Footer con número de página, fecha y hora
-    pdf.setFont("helvetica", "normal");
-    pdf.setFontSize(8);
-    pdf.text(
-        `Reporte generado el ${getDatetimeString(
-            new Date()
-        )}   -   Página ${pdf.internal.getNumberOfPages()}`,
-        pdf.internal.pageSize.width - 20,
-        pdf.internal.pageSize.height - 10,
-        { align: "right" }
-    );
-
     const pdfWidth = pdf.internal.pageSize.getWidth();
 
     // Gráficas

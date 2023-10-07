@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useRef, useEffect } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -22,56 +22,64 @@ ChartJS.register(
   Filler,
   Legend
 );
-export const TemperatureChart = ({tempData}) => {
-    const { labels, minTemp, maxTemp } = tempData;
-    const [options, setOptions] = useState({
-        responsive: true,
-        plugins: {
-          legend: {
-            position: "top",
-          },
-          title: {
-            display: true,
-            text: "Temperatura ambiente",
+export const TemperatureChart = ({ tempData, setTemperaturaCanvas }) => {
+ 
+  const temperaturaChartRef = useRef(null);
+  useEffect(() => {
+    if (temperaturaChartRef.current) {
+      setTemperaturaCanvas(temperaturaChartRef.current.canvas);
+    }
+  }, [temperaturaChartRef]);
+
+  const { labels, minTemp, maxTemp } = tempData;
+  const [options, setOptions] = useState({
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      title: {
+        display: true,
+        text: "Temperatura ambiente",
+      },
+    },
+    scales: {
+      y: {
+        type: "linear",
+        display: true,
+        ticks: {
+          callback: function (value, index, values) {
+            return value + " °C";
           },
         },
-        scales: {
-          y: {
-            type: "linear",
-            display: true,
-            ticks: {
-              callback: function (value, index, values) {
-                return value + " °C";
-              },
-            },
-            min: 0,
-            max: 50,
-          },
-        },
-      });
-      const [chartData, setChartData] = useState({
-        labels: labels,
-        datasets: [
-          {
-            label: "Mínima",
-            data: minTemp,
-            fill: false,
-            borderColor: "#94a3b8",
-            tension: 0.1,
-          },
-          {
-            label: "Máxima",
-            data: maxTemp,
-            fill: "-1",
-            borderColor: "#475569",
-            tension: 0.1,
-          },
-        ],
-      });
-    
-      return (
-        <Fragment>
-          <Line data={chartData} options={options} />
-        </Fragment>
-      );
-}
+        min: 0,
+        max: 50,
+      },
+    },
+  });
+  const [chartData, setChartData] = useState({
+    labels: labels,
+    datasets: [
+      {
+        label: "Mínima",
+        data: minTemp,
+        fill: false,
+        borderColor: "#94a3b8",
+        tension: 0.1,
+      },
+      {
+        label: "Máxima",
+        data: maxTemp,
+        fill: "-1",
+        borderColor: "#475569",
+        tension: 0.1,
+      },
+    ],
+  });
+
+  return (
+    <Fragment>
+      <Line data={chartData} options={options} ref={temperaturaChartRef} />
+    </Fragment>
+  );
+};

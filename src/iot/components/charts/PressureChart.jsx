@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useRef, useEffect } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -22,56 +22,63 @@ ChartJS.register(
   Filler,
   Legend
 );
-export const PressureChart = ({presData}) => {
-    const { labels, minPres, maxPres } = presData;
-    const [options, setOptions] = useState({
-        responsive: true,
-        plugins: {
-          legend: {
-            position: "top",
-          },
-          title: {
-            display: true,
-            text: "Presión atmosférica",
+export const PressureChart = ({ presData, setPresionCanvas }) => {
+  const presionChartRef = useRef(null);
+  useEffect(() => {
+    if (presionChartRef.current) {
+      setPresionCanvas(presionChartRef.current.canvas);
+    }
+  }, [presionChartRef]);
+
+  const { labels, minPres, maxPres } = presData;
+  const [options, setOptions] = useState({
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      title: {
+        display: true,
+        text: "Presión atmosférica",
+      },
+    },
+    scales: {
+      y: {
+        type: "linear",
+        display: true,
+        ticks: {
+          callback: function (value, index, values) {
+            return value + " hPa";
           },
         },
-        scales: {
-          y: {
-            type: "linear",
-            display: true,
-            ticks: {
-              callback: function (value, index, values) {
-                return value + " hPa";
-              },
-            },
-            min: 900,
-            max: 1100,
-          },
-        },
-      });
-      const [chartData, setChartData] = useState({
-        labels: labels,
-        datasets: [
-          {
-            label: "Mínima",
-            data: minPres,
-            fill: false,
-            borderColor: "#94a3b8",
-            tension: 0.1,
-          },
-          {
-            label: "Máxima",
-            data: maxPres,
-            fill: "-1",
-            borderColor: "#475569",
-            tension: 0.1,
-          },
-        ],
-      });
-    
-      return (
-        <Fragment>
-          <Line data={chartData} options={options} />
-        </Fragment>
-      );
-}
+        min: 900,
+        max: 1100,
+      },
+    },
+  });
+  const [chartData, setChartData] = useState({
+    labels: labels,
+    datasets: [
+      {
+        label: "Mínima",
+        data: minPres,
+        fill: false,
+        borderColor: "#94a3b8",
+        tension: 0.1,
+      },
+      {
+        label: "Máxima",
+        data: maxPres,
+        fill: "-1",
+        borderColor: "#475569",
+        tension: 0.1,
+      },
+    ],
+  });
+
+  return (
+    <Fragment>
+      <Line data={chartData} options={options} ref={presionChartRef} />
+    </Fragment>
+  );
+};
