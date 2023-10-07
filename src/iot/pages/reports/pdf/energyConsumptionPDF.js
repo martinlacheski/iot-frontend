@@ -54,7 +54,7 @@ export const energyConsumptionPDF = (
     pdf.setFont("helvetica", "bold");
     pdf.setFontSize(12);
     pdf.text(
-        "Reporte de calidad del aire",
+        "Reporte de consumo de energía eléctrica",
         pdf.internal.pageSize.width / 2,
         60,
         { align: "center" }

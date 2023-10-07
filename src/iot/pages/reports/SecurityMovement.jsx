@@ -6,6 +6,7 @@ import { showSuccessToast, showErrorAlert } from "../../../utils";
 import { getDatetimeString } from "../../../helpers/getDatetimeString";
 import { Box, Typography, Grid, Divider } from "@mui/material";
 import { SecurityMovementChart } from "../../components/charts";
+import { securityMovementPDF } from "./pdf/securityMovementPDF";
 
 export const SecurityMovement = () => {
   const [environments, setEnvironments] = useState([]);
@@ -14,6 +15,8 @@ export const SecurityMovement = () => {
   const [toDate, setToDate] = useState(null);
   const [loading, setLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
+
+  const [organization, setOrganization] = useState({});
 
   const fetchEnvironments = async () => {
     try {
@@ -25,8 +28,18 @@ export const SecurityMovement = () => {
     }
   };
 
+  const fetchOrganization = async () => {
+    try {
+      const { data } = await iotApi.get("/organization");
+      setOrganization(data.organization);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     fetchEnvironments();
+    fetchOrganization();
   }, []);
 
   // SUBMIT
@@ -80,6 +93,20 @@ export const SecurityMovement = () => {
     setLoading(true);
   };
 
+  const handleExportPDF = () => {
+    console.log('make pdf');
+    if (!tableData) return;
+    const pdf = securityMovementPDF(
+      organization,
+      selectedEnvironment,
+      fromDate,
+      toDate,
+      tableData
+    );
+
+    pdf.save(`Reporte de movimiento de personas y estado de puertas y ventanas.pdf`);
+  }
+
   return (
     <Fragment>
       <Header
@@ -97,6 +124,7 @@ export const SecurityMovement = () => {
         handleChangeToDate={handleChangeToDate}
         handleSubmit={handleSubmit}
         handleReset={handleReset}
+        handleExportPDF={handleExportPDF}
       />
 
       {!loading && (
