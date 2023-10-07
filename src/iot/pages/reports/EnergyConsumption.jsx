@@ -1,5 +1,6 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState, useRef } from "react";
 import { Header } from "../../components/Header";
+import { ReportsNavBar } from "../../components/ReportsNavBar";
 
 // Graficos
 import {
@@ -38,6 +39,7 @@ import {
 } from "@mui/icons-material";
 import { showSuccessToast, showErrorAlert } from "../../../utils";
 import { getDatetimeString } from "../../../helpers/getDatetimeString";
+import { energyConsumptionPDF } from "./pdf/energyConsumptionPDF";
 
 ChartJS.register(
   CategoryScale,
@@ -135,6 +137,7 @@ export const EnergyConsumption = () => {
   const [selectedEnvironment, setSelectedEnvironment] = useState("");
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
+  const [isData, setIsData] = useState(false);
 
   // VARIABLES PARA LOS GRÁFICOS
   const [labels, setLabels] = useState([]);
@@ -145,6 +148,40 @@ export const EnergyConsumption = () => {
   const [timeLapse, setTimeLapse] = useState("");
   const [consumption, setConsumption] = useState({});
 
+  const [organization, setOrganization] = useState({});
+  const [potenciaCanvas, setPotenciaCanvas] = useState(null);
+  const [tensionCanvas, setTensionCanvas] = useState(null);
+  const [corrienteCanvas, setCorrienteCanvas] = useState(null);
+  const [factorPotenciaCanvas, setFactorPotenciaCanvas] = useState(null);
+
+  const potenciaChartRef = useRef(null);
+  useEffect(() => {
+    if (potenciaChartRef.current) {
+      setPotenciaCanvas(potenciaChartRef.current.canvas);
+    }
+  }, [potenciaChartRef, consumption]);
+
+  const tensionChartRef = useRef(null);
+  useEffect(() => {
+    if (tensionChartRef.current) {
+      setTensionCanvas(tensionChartRef.current.canvas);
+    }
+  }, [tensionChartRef, consumption]);
+
+  const corrienteChartRef = useRef(null);
+  useEffect(() => {
+    if (corrienteChartRef.current) {
+      setCorrienteCanvas(corrienteChartRef.current.canvas);
+    }
+  }, [corrienteChartRef, consumption]);
+
+  const factorPotenciaChartRef = useRef(null);
+  useEffect(() => {
+    if (factorPotenciaChartRef.current) {
+      setFactorPotenciaCanvas(factorPotenciaChartRef.current.canvas);
+    }
+  }, [factorPotenciaChartRef, consumption]);
+
   const fetchEnvironments = async () => {
     try {
       const { data } = await iotApi.get("/environments");
@@ -154,8 +191,18 @@ export const EnergyConsumption = () => {
     }
   };
 
+  const fetchOrganization = async () => {
+    try {
+      const { data } = await iotApi.get("/organization");
+      setOrganization(data.organization);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchEnvironments();
+    fetchOrganization();
   }, []);
 
   // SUBMIT
@@ -185,6 +232,7 @@ export const EnergyConsumption = () => {
     });
 
     try {
+      setIsData(false);
       const { data } = await iotApi.get(
         `/reports/energy-consumption/resume/?${queryParams}`
       );
@@ -192,7 +240,7 @@ export const EnergyConsumption = () => {
       showSuccessToast("¡Reporte generado con éxito!");
       if (!data) return;
 
-      console.log(data);
+      setIsData(true);
 
       // ACTUALIZAR LOS DATOS DE LOS GRÁFICOS
       setLabels(data.labels);
@@ -329,6 +377,7 @@ export const EnergyConsumption = () => {
       ];
 
       setConsumption(consumption);
+      setIsData(true);
     } catch (error) {
       showErrorAlert("¡Ocurrió un error al generar el reporte!");
       console.log(error);
@@ -353,6 +402,39 @@ export const EnergyConsumption = () => {
     setPfChartData({});
     setTimeLapse("");
     setConsumption({});
+    setIsData(false);
+  };
+
+  const handleExportPDF = () => {
+    if (!isData) {
+      showErrorAlert("¡No hay datos para exportar!");
+      return;
+    } else if (
+      !potenciaCanvas ||
+      !tensionCanvas ||
+      !corrienteCanvas ||
+      !factorPotenciaCanvas ||
+      !consumption
+    ) {
+      showErrorAlert("¡Ocurrió un error al generar el reporte PDF!");
+      return;
+    }
+
+    console.log("potenciaCanvas", potenciaCanvas);
+
+    const pdf = energyConsumptionPDF(
+      organization,
+      selectedEnvironment,
+      fromDate,
+      toDate,
+      potenciaCanvas,
+      tensionCanvas,
+      corrienteCanvas,
+      factorPotenciaCanvas,
+      consumption
+    );
+
+    pdf.save("Reporte de consumo energético.pdf");
   };
 
   return (
@@ -362,111 +444,26 @@ export const EnergyConsumption = () => {
         subtitle="Desde esta sección podrá generar reportes del consumo de energía eléctrica en un determinado ambiente."
       />
 
-      <Box sx={{ p: "0.5rem 2rem 1.25rem 2rem", backgroundColor: "white" }}>
-        <FlexBetween>
-          <Grid container spacing={1} sx={{ width: "100%" }}>
-            <Grid item xs={12} md={5}>
-              <FormControl fullWidth>
-                <InputLabel>Seleccione un ambiente de la lista</InputLabel>
-                <Select
-                  name="environment"
-                  value={selectedEnvironment}
-                  onChange={(e) => setSelectedEnvironment(e.target.value)}
-                  placeholder="Seleccione un ambiente de la lista"
-                  sx={{
-                    backgroundColor: "white",
-                    // "& .MuiSelect-select": {
-                    //   minHeight: "1rem",
-                    //   height: "1rem",
-                    // },
-                  }}
-                >
-                  {environments.map((environment) => (
-                    <MenuItem key={environment._id} value={environment._id}>
-                      {environment.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={6} md={2}>
-              <DateTimePicker
-                format="DD/MM/YYYY HH:mm:ss"
-                ampm={false}
-                value={fromDate}
-                onChange={handleChangeFromDate}
-                label="Desde fecha"
-                sx={{
-                  width: "100%",
-                  backgroundColor: "white",
-                  // "& .MuiInputBase-input": {
-                  //   height: "1rem",
-                  // },
-                }}
-              />
-            </Grid>
-            <Grid item xs={6} md={2}>
-              <DateTimePicker
-                format="DD/MM/YYYY HH:mm:ss"
-                ampm={false}
-                value={toDate}
-                onChange={handleChangeToDate}
-                label="Hasta fecha"
-                sx={{
-                  width: "100%",
-                  backgroundColor: "white",
-                  // "& .MuiInputBase-input": {
-                  //   height: "1rem",
-                  // },
-                }}
-              />
-            </Grid>
-            <Grid item xs={4} md={1}>
-              <Button
-                title="Generar reporte"
-                variant="contained"
-                onClick={handleSubmit}
-                sx={{ height: "100%", width: "100%", gap: 0.5 }}
-                size="small"
-              >
-                <EditNoteOutlined fontSize="small" />
-                Generar
-              </Button>
-            </Grid>
-            <Grid item xs={4} md={1}>
-              <Button
-                title="Limpiar campos"
-                variant="contained"
-                onClick={handleReset}
-                color="secondary"
-                sx={{ height: "100%", width: "100%", gap: 0.5 }}
-                size="small"
-              >
-                <RestartAltOutlined fontSize="small" />
-                Limpiar
-              </Button>
-            </Grid>
-            <Grid item xs={4} md={1}>
-              <Button
-                title="Exportar reporte"
-                variant="contained"
-                color="error"
-                sx={{ height: "100%", width: "100%", gap: 0.5 }}
-                size="small"
-              >
-                <PictureAsPdfOutlined fontSize="small" />
-                Exportar
-              </Button>
-            </Grid>
-          </Grid>
-        </FlexBetween>
+      <ReportsNavBar
+        environments={environments}
+        setSelectedEnvironment={setSelectedEnvironment}
+        selectedEnvironment={selectedEnvironment}
+        fromDate={fromDate}
+        handleChangeFromDate={handleChangeFromDate}
+        toDate={toDate}
+        handleChangeToDate={handleChangeToDate}
+        handleSubmit={handleSubmit}
+        handleReset={handleReset}
+        handleExportPDF={handleExportPDF}
+      />
 
+      <Box sx={{ px: "2rem", backgroundColor: "white" }}>
         {/* ESTADÍSTICAS */}
         {consumption.length > 0 && (
           <Grid container spacing={1} sx={{ my: "1rem" }}>
             <Grid item xs={12}>
               <Typography variant="h6" sx={{ mb: "1rem" }}>
-                Reporte de consumo energético 
+                Reporte de consumo energético
                 {timeLapse && (
                   <span>
                     {" "}
@@ -513,35 +510,51 @@ export const EnergyConsumption = () => {
                 ))}
               </Grid>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12}>
               {
                 // MOSTRAR LOS GRÁFICOS SI YA SE GENERÓ EL REPORTE
                 powerChartData.labels && (
-                  <Line data={powerChartData} options={powerChartOptions} />
+                  <Line
+                    data={powerChartData}
+                    options={powerChartOptions}
+                    ref={potenciaChartRef}
+                  />
                 )
               }
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12}>
               {
                 // MOSTRAR LOS GRÁFICOS SI YA SE GENERÓ EL REPORTE
                 voltageChartData.labels && (
-                  <Line data={voltageChartData} options={voltageChartOptions} />
+                  <Line
+                    data={voltageChartData}
+                    options={voltageChartOptions}
+                    ref={tensionChartRef}
+                  />
                 )
               }
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12}>
               {
                 // MOSTRAR LOS GRÁFICOS SI YA SE GENERÓ EL REPORTE
                 currentChartData.labels && (
-                  <Line data={currentChartData} options={currentChartOptions} />
+                  <Line
+                    data={currentChartData}
+                    options={currentChartOptions}
+                    ref={corrienteChartRef}
+                  />
                 )
               }
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12}>
               {
                 // MOSTRAR LOS GRÁFICOS SI YA SE GENERÓ EL REPORTE
                 pfChartData.labels && (
-                  <Line data={pfChartData} options={pfChartOptions} />
+                  <Line
+                    data={pfChartData}
+                    options={pfChartOptions}
+                    ref={factorPotenciaChartRef}
+                  />
                 )
               }
             </Grid>
