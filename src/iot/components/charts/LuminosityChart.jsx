@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useRef, useEffect } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -23,7 +23,14 @@ ChartJS.register(
   Legend
 );
 
-export const LuminosityChart = ({ data }) => {
+export const LuminosityChart = ({ data, setIluminacionCanvas }) => {
+  const iluminacionChartRef = useRef(null);
+  useEffect(() => {
+    if (iluminacionChartRef.current) {
+      setIluminacionCanvas(iluminacionChartRef.current.canvas);
+    }
+  }, [iluminacionChartRef]);
+
   const { title, labels, mins, maxs } = data;
   const [options, setOptions] = useState({
     responsive: true,
@@ -70,7 +77,7 @@ export const LuminosityChart = ({ data }) => {
 
   return (
     <Fragment>
-      <Line data={chartData} options={options} />
+      <Line data={chartData} options={options} ref={iluminacionChartRef} />
     </Fragment>
   );
 };

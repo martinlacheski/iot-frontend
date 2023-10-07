@@ -6,6 +6,8 @@ import { showSuccessToast, showErrorAlert } from "../../../utils";
 import { getDatetimeString } from "../../../helpers/getDatetimeString";
 import { ReportsNavBar } from "../../components/ReportsNavBar";
 import { MQChart } from "../../components/charts";
+import jsPDF from "jspdf";
+import { airQualityPDF } from "./pdf/airQualityPDF";
 
 export const AirQuality = () => {
   const [environments, setEnvironments] = useState([]);
@@ -17,6 +19,13 @@ export const AirQuality = () => {
   const [mq7, setMQ7] = useState({});
   const [mq135, setMQ135] = useState({});
   const [loading, setLoading] = useState(true);
+  const [isData, setIsData] = useState(false);
+
+  const [organization, setOrganization] = useState({});
+  const [mq2Canvas, setMQ2Canvas] = useState(null);
+  const [mq4Canvas, setMQ4Canvas] = useState(null);
+  const [mq7Canvas, setMQ7Canvas] = useState(null);
+  const [mq135Canvas, setMQ135Canvas] = useState(null);
 
   const fetchEnvironments = async () => {
     try {
@@ -27,8 +36,18 @@ export const AirQuality = () => {
     }
   };
 
+  const fetchOrganization = async () => {
+    try {
+      const { data } = await iotApi.get("/organization");
+      setOrganization(data.organization);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchEnvironments();
+    fetchOrganization();
   }, []);
 
   // SUBMIT
@@ -53,6 +72,7 @@ export const AirQuality = () => {
     });
 
     try {
+      setIsData(false);
       const { data } = await iotApi.get(
         `/reports/gases/resume/?${queryParams}`
       );
@@ -60,6 +80,7 @@ export const AirQuality = () => {
       setMQ4(data.mq4);
       setMQ7(data.mq7);
       setMQ135(data.mq135);
+      setIsData(true);
       setLoading(false);
       showSuccessToast("¡Reporte generado con éxito!");
       if (!data) return;
@@ -86,6 +107,30 @@ export const AirQuality = () => {
     setMQ7({});
     setMQ135({});
     setLoading(true);
+    setIsData(false);
+  };
+
+  const handleExportPDF = () => {
+    if (!isData) {
+      showErrorAlert("¡No hay datos para exportar!");
+      return;
+    } else if (!mq2Canvas || !mq4Canvas || !mq7Canvas || !mq135Canvas) {
+      showErrorAlert("¡No hay datos para exportar!");
+      return;
+    }
+
+    const pdf = airQualityPDF(
+      organization,
+      selectedEnvironment,
+      fromDate,
+      toDate,
+      mq2Canvas,
+      mq4Canvas,
+      mq7Canvas,
+      mq135Canvas
+    );
+
+    pdf.save("Reporte de calidad del aire.pdf");
   };
 
   return (
@@ -105,6 +150,7 @@ export const AirQuality = () => {
         handleChangeToDate={handleChangeToDate}
         handleSubmit={handleSubmit}
         handleReset={handleReset}
+        handleExportPDF={handleExportPDF}
       />
 
       {!loading && (
@@ -121,17 +167,17 @@ export const AirQuality = () => {
             <Divider sx={{ mb: 2 }} />
 
             <Grid container spacing={2}>
-              <Grid item xs={12} md={6}>
-                <MQChart data={mq2} />
+              <Grid item xs={12} lg={12}>
+                <MQChart data={mq2} setCanvas={setMQ2Canvas} />
               </Grid>
-              <Grid item xs={12} md={6}>
-                <MQChart data={mq4} />
+              <Grid item xs={12} lg={12}>
+                <MQChart data={mq4} setCanvas={setMQ4Canvas} />
               </Grid>
-              <Grid item xs={12} md={6}>
-                <MQChart data={mq7} />
+              <Grid item xs={12} lg={12}>
+                <MQChart data={mq7} setCanvas={setMQ7Canvas} />
               </Grid>
-              <Grid item xs={12} md={6}>
-                <MQChart data={mq135} />
+              <Grid item xs={12} lg={12}>
+                <MQChart data={mq135} setCanvas={setMQ135Canvas} />
               </Grid>
             </Grid>
           </Fragment>

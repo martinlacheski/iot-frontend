@@ -1,7 +1,18 @@
-import React from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import { Line } from "react-chartjs-2";
+import jsPDF from "jspdf";
+import { getEnvVariables } from "../../../helpers";
+const { VITE_BACKEND_URL } = getEnvVariables();
 
-export const EnergyWasteChart = ({ chartData }) => {
+export const EnergyWasteChart = ({ chartData, setEnergyWasteCanvas }) => {
+  const energyWasteChartRef = useRef(null);
+
+  useEffect(() => {
+    if (energyWasteChartRef.current) {
+      setEnergyWasteCanvas(energyWasteChartRef.current.canvas);
+    }
+  }
+  , [energyWasteChartRef]);
 
   const { labels, dataAC, dataLighting, dataDevices, dataMotionDetection } =
     chartData;
@@ -74,6 +85,15 @@ export const EnergyWasteChart = ({ chartData }) => {
       },
     },
   };
-
-  return <Line data={data} options={options} height="100vh" />;
+  return (
+    <Fragment>
+      <Line
+        data={data}
+        options={options}
+        height="100vh"
+        ref={energyWasteChartRef}
+      />
+      {/* <button onClick={handleExportPDF}>Exportar a PDF</button> */}
+    </Fragment>
+  );
 };

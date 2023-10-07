@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState, useRef } from "react";
 import { Header } from "../../components/Header";
 import { ReportsNavBar } from "../../components/ReportsNavBar";
 import iotApi from "../../../api/iotApi";
@@ -6,14 +6,22 @@ import { showSuccessToast, showErrorAlert } from "../../../utils";
 import { getDatetimeString } from "../../../helpers/getDatetimeString";
 import { EnergyWasteChart } from "../../components/charts";
 import { Box, Typography, Grid, Divider } from "@mui/material";
+import jsPDF from "jspdf";
+import { getEnvVariables } from "../../../helpers";
+const { VITE_BACKEND_URL } = getEnvVariables();
+import { energyWastePDF } from "./pdf/energyWastePDF";
 
 export const EnergyWaste = () => {
   const [environments, setEnvironments] = useState([]);
+  const [organization, setOrganization] = useState({});
   const [selectedEnvironment, setSelectedEnvironment] = useState("");
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
   const [loading, setLoading] = useState(true);
   const [chartData, setChartData] = useState({});
+  const [isData, setIsData] = useState(false);
+
+  const [energyWasteCanvas, setEnergyWasteCanvas] = useState(null);
 
   const fetchEnvironments = async () => {
     try {
@@ -24,14 +32,24 @@ export const EnergyWaste = () => {
     }
   };
 
+  const fetchOrganization = async () => {
+    try {
+      const { data } = await iotApi.get("/organization");
+      setOrganization(data.organization);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchEnvironments();
+    fetchOrganization();
   }, []);
 
   // SUBMIT
   const handleSubmit = async () => {
     setLoading(true);
-    
+
     // VALIDACIONES BÁSICAS
     if (!selectedEnvironment || !fromDate || !toDate) {
       showErrorAlert("¡Todos los campos son obligatorios!");
@@ -50,12 +68,10 @@ export const EnergyWaste = () => {
     });
 
     try {
+      setIsData(false);
       const { data } = await iotApi.get(
         `/reports/energy-waste/resume/?${queryParams}`
       );
-
-        console.log(data);
-
       setChartData({
         labels: data.labels,
         dataAC: data.averagePowerAC,
@@ -63,6 +79,7 @@ export const EnergyWaste = () => {
         dataDevices: data.averagePowerDevices,
         dataMotionDetection: data.motionDetection,
       });
+      setIsData(true);
       setLoading(false);
 
       showSuccessToast("¡Reporte generado con éxito!");
@@ -87,7 +104,29 @@ export const EnergyWaste = () => {
     setToDate(null);
     setChartData({});
     setLoading(true);
+    setIsData(false);
   };
+
+  const handleExportPDF = () => {
+    if (!isData) {
+      showErrorAlert("¡No hay datos para exportar!");
+      return;
+    } else if (!energyWasteCanvas) {
+      showErrorAlert("¡No hay datos para exportar!");
+      return;
+    }
+
+    const pdf = energyWastePDF(
+      organization,
+      selectedEnvironment,
+      fromDate,
+      toDate,
+      energyWasteCanvas
+    );
+
+    pdf.save("Reporte de uso ineficiente de energía eléctrica.pdf");
+  };
+
   return (
     <Fragment>
       <Header
@@ -105,21 +144,27 @@ export const EnergyWaste = () => {
         handleChangeToDate={handleChangeToDate}
         handleSubmit={handleSubmit}
         handleReset={handleReset}
+        handleExportPDF={handleExportPDF}
       />
 
       {!loading && (
-        <Box
-          sx={{
-            backgroundColor: "white",
-            px: "2rem",
-          }}
-        >
-          <Typography variant="h6" sx={{ mb: 1 }}>
-            Reporte de uso ineficiente de energía eléctrica
-          </Typography>
-          <Divider sx={{ mb: 2 }} />
-          <EnergyWasteChart chartData={chartData} />
-        </Box>
+        <Fragment>
+          <Box
+            sx={{
+              backgroundColor: "white",
+              px: "2rem",
+            }}
+          >
+            <Typography variant="h6" sx={{ mb: 1 }}>
+              Reporte de uso ineficiente de energía eléctrica
+            </Typography>
+            <Divider sx={{ mb: 2 }} />
+            <EnergyWasteChart
+              chartData={chartData}
+              setEnergyWasteCanvas={setEnergyWasteCanvas}
+            />
+          </Box>
+        </Fragment>
       )}
     </Fragment>
   );

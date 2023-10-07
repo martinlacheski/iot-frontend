@@ -77,7 +77,7 @@ export const Organization = () => {
       id: data.organization._id,
       name: data.organization.name,
       address: data.organization.address,
-      cityId: data.organization.city,
+      cityId: data.organization.city._id,
       email: data.organization.email,
       phone: data.organization.phone,
       webpage: data.organization.webpage,

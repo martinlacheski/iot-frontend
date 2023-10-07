@@ -6,6 +6,7 @@ import { showSuccessToast, showErrorAlert } from "../../../utils";
 import { getDatetimeString } from "../../../helpers/getDatetimeString";
 import { Box, Typography, Grid, Divider } from "@mui/material";
 import { SecurityMovementChart } from "../../components/charts";
+import { securityMovementPDF } from "./pdf/securityMovementPDF";
 
 export const SecurityMovement = () => {
   const [environments, setEnvironments] = useState([]);
@@ -15,21 +16,35 @@ export const SecurityMovement = () => {
   const [loading, setLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
 
+  const [organization, setOrganization] = useState({});
+
   const fetchEnvironments = async () => {
     try {
       const { data } = await iotApi.get("/environments");
       setEnvironments(data.environments);
     } catch (error) {
       console.log(error);
+      showErrorAlert("¡Ocurrió un error al cargar los ambientes!");
     }
   };
 
+  const fetchOrganization = async () => {
+    try {
+      const { data } = await iotApi.get("/organization");
+      setOrganization(data.organization);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     fetchEnvironments();
+    fetchOrganization();
   }, []);
 
   // SUBMIT
   const handleSubmit = async () => {
+
     setLoading(true);
 
     // VALIDACIONES BÁSICAS
@@ -48,10 +63,6 @@ export const SecurityMovement = () => {
       fromDate: getDatetimeString(new Date(fromDate)),
       toDate: getDatetimeString(new Date(toDate)),
     });
-    // const queryParams = new URLSearchParams({
-    //   fromDate: '2023-08-26 17:00:00',
-    //   toDate: '2023-08-26 18:30:00',
-    // });
 
     try {
       const { data } = await iotApi.get(
@@ -82,6 +93,20 @@ export const SecurityMovement = () => {
     setLoading(true);
   };
 
+  const handleExportPDF = () => {
+    console.log('make pdf');
+    if (!tableData) return;
+    const pdf = securityMovementPDF(
+      organization,
+      selectedEnvironment,
+      fromDate,
+      toDate,
+      tableData
+    );
+
+    pdf.save(`Reporte de movimiento de personas y estado de puertas y ventanas.pdf`);
+  }
+
   return (
     <Fragment>
       <Header
@@ -99,6 +124,7 @@ export const SecurityMovement = () => {
         handleChangeToDate={handleChangeToDate}
         handleSubmit={handleSubmit}
         handleReset={handleReset}
+        handleExportPDF={handleExportPDF}
       />
 
       {!loading && (

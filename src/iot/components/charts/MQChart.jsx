@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useRef, useEffect } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -23,7 +23,15 @@ ChartJS.register(
   Legend
 );
 
-export const MQChart = ({ data }) => {
+export const MQChart = ({ data, setCanvas }) => {
+  const mqChartRef = useRef(null);
+
+  useEffect(() => {
+    if (mqChartRef.current) {
+      setCanvas(mqChartRef.current.canvas);
+    }
+  }, [mqChartRef]);
+
   const { title, labels, mins, maxs, limits, maxLimit } = data;
   const [options, setOptions] = useState({
     responsive: true,
@@ -45,8 +53,8 @@ export const MQChart = ({ data }) => {
             return value + " ppm";
           },
         },
-        min : 0,
-        max : maxLimit,
+        min: 0,
+        max: maxLimit,
       },
     },
   });
@@ -79,7 +87,7 @@ export const MQChart = ({ data }) => {
 
   return (
     <Fragment>
-      <Line data={chartData} options={options} />
+      <Line data={chartData} options={options} ref={mqChartRef} />
     </Fragment>
   );
 };
